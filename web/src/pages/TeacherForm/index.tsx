@@ -85,7 +85,7 @@ const TeacherForm: FC = () => {
       schedule: scheduleItems
     }).then(() => {
       alert('Cadastrado com sucesso')
-      history.push("/")
+      history.push("/study")
     }).catch((reason) => {
       console.error(reason)
       alert("Erro no cadastro!")
