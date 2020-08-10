@@ -34,9 +34,8 @@ const styles = StyleSheet.create({
   button: {
     height: 150,
     width: '48%',
-    // backgroundColor: '#333',
     borderRadius: 8,
-    padding: 24,
+    padding: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -52,7 +51,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Archivo_700Bold',
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
+    textAlign: 'center',
   },
 
   totalConnections: {
@@ -60,9 +60,8 @@ const styles = StyleSheet.create({
     color: '#d4c2ff',
     fontSize: 12,
     lineHeight: 20,
-    maxWidth: 140,
     marginTop: 40,
-    alignItems: 'center',
+    alignSelf: 'center',
   },
 });
 

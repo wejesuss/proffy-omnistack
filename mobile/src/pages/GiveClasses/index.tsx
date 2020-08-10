@@ -3,7 +3,7 @@ import React from 'react';
 import { View, ImageBackground, Text } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
-import giveClassesBgImage from '../../assets/images/icons/background.png';
+import giveClassesBgImage from '../../assets/images/give-classes-background.png';
 import styles from './styles';
 
 const GiveClasses: React.FC = () => {
@@ -22,7 +22,7 @@ const GiveClasses: React.FC = () => {
       >
         <Text style={styles.title}>Quer ser um Proffy?</Text>
         <Text style={styles.description}>
-          Param começar, primeiro você precisa se cadastrar como professor na
+          Para começar, primeiro você precisa se cadastrar como professor na
           nossa plataforma web.
         </Text>
 

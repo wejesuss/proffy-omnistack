@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
@@ -7,9 +7,11 @@ import giveClassesIcon from '../../assets/images/icons/give-classes.png';
 import heartIcon from '../../assets/images/icons/heart.png';
 import studyIcon from '../../assets/images/icons/study.png';
 import landingIcon from '../../assets/images/landing.png';
+import api from '../../services/api';
 import styles from './styles';
 
 const Landing: React.FC = () => {
+  const [total, setTotal] = useState(0);
   const navigation = useNavigation();
 
   function handleNavigateToGiveClasses() {
@@ -19,6 +21,15 @@ const Landing: React.FC = () => {
   function handleNavigateToStudyPages() {
     navigation.navigate('Study');
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      api.get('/connections').then((result) => {
+        const { total } = result.data;
+        setTotal(total);
+      });
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -50,9 +61,8 @@ const Landing: React.FC = () => {
       </View>
 
       <Text style={styles.totalConnections}>
-        Total de
-        <Text style={styles.titleBold}>200</Text> conexões já realizadas{' '}
-        <Image source={heartIcon} />
+        Total de <Text style={styles.titleBold}>{total}</Text> conexões já
+        realizadas <Image source={heartIcon} />
       </Text>
     </View>
   );
