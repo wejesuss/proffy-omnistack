@@ -12,12 +12,12 @@ import purpleHeartIcon from '../../assets/images/icons/purple-heart.svg';
 import api from '../../services/api';
 
 const Landing: React.FC = () => {
-  const [total, SetTotal] = useState(0)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
     api.get("/connections").then(result => {
       const {total} = result.data
-      SetTotal(total)
+      setTotal(total)
     })
 
   }, [])
