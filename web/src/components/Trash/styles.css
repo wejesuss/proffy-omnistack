@@ -1,0 +1,16 @@
+#schedule-items .input-block.trash {
+  text-align: center;
+}
+
+#schedule-items .input-block.trash img {
+  height: 64px;
+  cursor: pointer;
+}
+
+
+@media (min-width: 700px) {
+  #schedule-items .input-block.trash {
+    display: flex;
+    align-self: end;
+  }
+}
