@@ -11,6 +11,7 @@ import api from '../../services/api';
 import './styles.css';
 import warningIcon from '../../assets/images/icons/warning.svg'
 import { useHistory } from 'react-router-dom';
+import Trash from '../../components/Trash';
 
 const TeacherForm: FC = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6])
@@ -58,6 +59,12 @@ const TeacherForm: FC = () => {
       ...scheduleItems,
       { week_day: secureDayToUse, from: '', to: '' }
     ])
+  }
+
+  function removeScheduleItem(index: number) {
+      const newSchedule = scheduleItems.filter((_, position) => position !== index)
+      setScheduleItems(newSchedule)
+      console.log(scheduleItems, newSchedule)
   }
 
   function setScheduleItemValue(position: number, field: string, value: string) {
@@ -214,6 +221,9 @@ const TeacherForm: FC = () => {
                   value={scheduleItem.to}
                   onChange={(e) => { setScheduleItemValue(index, "to", e.target.value)}}
                 />
+                {index > 0 && (
+                  <Trash removeScheduleItem={() => removeScheduleItem(index)} />
+                )}
               </div>
             ))}
           </fieldset>
