@@ -25,6 +25,12 @@ class ClassesController {
 
         try {
             const timeInMinutes = convertHoursToMinutes(classTime);
+            const today = new Date(Date.now());
+            const todayInMinutes = convertHoursToMinutes(
+                `${today.getHours()}:${today.getMinutes()}`
+            );
+            const compareTimeQuery =
+                '(`class_schedule`.`to` > `class_schedule`.`from` and `class_schedule`.`from` <= ?? and `class_schedule`.`to` > ?? or (`class_schedule`.`to` < `class_schedule`.`from` and `class_schedule`.`from` <= ?? and `class_schedule`.`to` > ??))';
 
             const classes = await db('classes')
                 .whereExists(function () {
@@ -36,11 +42,11 @@ class ClassesController {
                         .whereRaw('`class_schedule`.`week_day` = ??', [
                             Number(classWeekDay),
                         ])
-                        .whereRaw('`class_schedule`.`from` <= ??', [
+                        .whereRaw(compareTimeQuery, [
                             timeInMinutes,
-                        ])
-                        .whereRaw('`class_schedule`.`to` > ??', [
                             timeInMinutes,
+                            timeInMinutes,
+                            todayInMinutes,
                         ]);
                 })
                 .select('*')
