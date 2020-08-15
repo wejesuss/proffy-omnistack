@@ -50,7 +50,7 @@ class ClassesController {
                         ]);
                 })
                 .select('*')
-                .where('subject', 'like', `%${classSubject}%`)
+                .where('subject', '=', classSubject)
                 .join('users', 'classes.user_id', '=', 'users.id')
                 .select(['classes.*', 'users.*']);
 
