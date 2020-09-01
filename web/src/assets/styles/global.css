@@ -37,9 +37,11 @@ body {
 }
 
 #root {
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 body, input, button, textarea {
@@ -52,7 +54,7 @@ body, input, button, textarea {
     max-width: 700px;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 900px) {
   :root {
     font-size: 62.5%;
   }
