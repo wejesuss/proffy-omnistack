@@ -11,6 +11,7 @@ import './styles.css';
 interface PageHeaderProps {
   title: string;
   description?: string;
+  topBarTitle?: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
@@ -20,6 +21,9 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         <Link to="/">
           <img src={backIcon} alt="Voltar" />
         </Link>
+        {props.topBarTitle && (
+          <h1 className="title">{props.topBarTitle}</h1>
+        )}
         <img src={logoImg} alt="Logo Proffy" />
       </div>
       <div className="header-content">

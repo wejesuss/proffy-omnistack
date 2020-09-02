@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC, useState, FormEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
+import Trash from '../../components/Trash';
 
 import api from '../../services/api';
 
-import './styles.css';
 import warningIcon from '../../assets/images/icons/warning.svg'
-import { useHistory } from 'react-router-dom';
-import Trash from '../../components/Trash';
+import rocketIcon from '../../assets/images/icons/rocket.svg'
+import './styles.css';
 
 const TeacherForm: FC = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6])
@@ -103,8 +104,17 @@ const TeacherForm: FC = () => {
     <div id="page-give-classes" className="container">
       <PageHeader
         title="Que incrível que você quer dar aulas"
+        topBarTitle="Dar aulas"
         description="O primeiro passo é preencher esse formulário de incrição"
-      />
+      >
+        <div className="rocket-message">
+          <img src={rocketIcon} alt="Rocket"/>
+          <p>
+            Preparare-se! <br/>
+            vai ser o máximo.
+          </p>
+        </div>
+      </PageHeader>
 
       <main>
         <form id="create-class" onSubmit={handleCreateClass}>

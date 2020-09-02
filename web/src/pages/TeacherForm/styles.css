@@ -1,13 +1,27 @@
+#page-give-classes {
+  width: 100vw;
+  height: 100vh;
+}
+
+#page-give-classes .rocket-message {
+  display: none;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 90px;
+}
+
+#page-give-classes .rocket-message p {
+  margin: 0 0 0 2.4rem;
+  font-size: 1.4rem;
+  line-height: 2rem;
+}
+
 #page-give-classes .select-block + .select-block,
 #page-give-classes .select-block + .input-block,
 #page-give-classes .input-block + .input-block,
 #page-give-classes .input-block + .textarea-block {
     margin-top: 2.4rem;
-}
-
-#page-give-classes {
-  width: 100vw;
-  height: 100vh;
 }
 
 #page-give-classes .page-header .header-content {
@@ -124,6 +138,10 @@ label small {
 
   #page-give-classes .page-header .header-content {
       margin-bottom: 0;
+  }
+
+  #page-give-classes .rocket-message {
+    display: flex;
   }
 
   #page-give-classes main fieldset {
