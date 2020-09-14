@@ -8,7 +8,7 @@ import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import Trash from '../../components/Trash';
 
-import api from '../../services/api';
+// import api from '../../services/api';
 
 import warningIcon from '../../assets/images/icons/warning.svg'
 import rocketIcon from '../../assets/images/icons/rocket.svg'
@@ -18,13 +18,11 @@ const TeacherForm: FC = () => {
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6])
   const [scheduleItems, setScheduleItems] = useState([
     { week_day: 0, from: '', to: ''}
-  ])
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
+  ]);
+  const [, setWhatsapp] = useState("");
   const [bio, setBio] = useState("");
   const [subject, setSubject] = useState("");
-  const [cost, setCost] = useState("");
+  const [, setCost] = useState("");
 
   const history = useHistory();
 
@@ -81,23 +79,27 @@ const TeacherForm: FC = () => {
   }
 
   function handleCreateClass(e: FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
 
-    api.post("/classes", {
-      name,
-      avatar,
-      whatsapp,
-      bio,
-      subject,
-      cost: Number(cost),
-      schedule: scheduleItems
-    }).then(() => {
-      alert('Cadastrado com sucesso')
-      history.push("/study")
-    }).catch((reason) => {
-      console.error(reason)
-      alert("Erro no cadastro!")
-    })
+    history.push("/success", {
+      created: true,
+      messageTitle: "Cadastro salvo!",
+      message: "Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.",
+      buttonText: "Acessar lista"
+    });
+    // api.post("/classes", {
+    //   whatsapp,
+    //   bio,
+    //   subject,
+    //   cost: Number(cost),
+    //   schedule: scheduleItems
+    // }).then(() => {
+    //   alert('Cadastrado com sucesso')
+    //   history.push("/study")
+    // }).catch((reason) => {
+    //   console.error(reason)
+    //   alert("Erro no cadastro!")
+    // })
   }
 
   return (
@@ -120,73 +122,66 @@ const TeacherForm: FC = () => {
         <form id="create-class" onSubmit={handleCreateClass}>
           <fieldset>
             <legend>Seu dados</legend>
+            <div className="user-container group-container">
+              <div className="user-info">
+                <img src="https://github.com/maykbrito.png" alt="Conta do usuário"/>
+                Mayk Brito
+              </div>
+              <Input
+                label="Whatsapp"
+                name="whatsapp"
+                placeholder="(  ) _ ____ ____"
+                mask="phone"
+                id="whatsapp"
+                setValue={setWhatsapp}
+              >
+                <small>(+55)</small>
+              </Input>
+            </div>
 
-            <Input
-              label="Nome Completo"
-              name="name"
-              id="name"
-              value={name}
-              onChange={(e) => { setName(e.target.value)}}
-            />
-            <Input
-              label="Link da sua foto"
-              name="avatar"
-              type="url"
-              id="avatar"
-              value={avatar}
-              onChange={(e) => { setAvatar(e.target.value)}}
-            >
-              <small>(começe com https://)</small>
-            </Input>
-            <Input
-              label="Whatsapp"
-              name="whatsapp"
-              type="number"
-              id="whatsapp"
-              value={whatsapp}
-              onChange={(e) => { setWhatsapp(e.target.value)}}
-            >
-              <small>(somente números)</small>
-            </Input>
             <TextArea
               label="Biografia"
               name="bio"
               id="bio"
+              maxLength={300}
               value={bio}
               onChange={(e) => { setBio(e.target.value)}}
-            />
+            >
+              <small>(Máximo 300 caracteres)</small>
+            </TextArea>
           </fieldset>
 
           <fieldset>
             <legend>Sobre a aula</legend>
 
-            <Select name="subject" label="Matéria" id="subject" options={[
-                {value: "Artes", label: "Artes"},
-                {value: "Biologia", label: "Biologia"},
-                {value: "Ciências", label: "Ciências"},
-                {value: "Educação Física", label: "Educação Física"},
-                {value: "Física", label: "Física"},
-                {value: "Geografia", label: "Geografia"},
-                {value: "História", label: "História"},
-                {value: "Matemática", label: "Matemática"},
-                {value: "Português", label: "Português"},
-                {value: "Química", label: "Química"}
-              ]}
-              value={subject}
-              onChange={(e) => { setSubject(e.target.value)}}
-            />
+            <div className="group-container">
+              <Select name="subject" label="Matéria" id="subject" options={[
+                  {value: "Artes", label: "Artes"},
+                  {value: "Biologia", label: "Biologia"},
+                  {value: "Ciências", label: "Ciências"},
+                  {value: "Educação Física", label: "Educação Física"},
+                  {value: "Física", label: "Física"},
+                  {value: "Geografia", label: "Geografia"},
+                  {value: "História", label: "História"},
+                  {value: "Matemática", label: "Matemática"},
+                  {value: "Português", label: "Português"},
+                  {value: "Química", label: "Química"}
+                ]}
+                value={subject}
+                onChange={(e) => { setSubject(e.target.value)}}
+              />
 
-            <Input
-              name="cost"
-              label="Custo da sua hora/aula"
-              max="10000"
-              type="number"
-              id="cost"
-              value={cost}
-              onChange={(e) => { setCost(e.target.value)}}
-            >
-              <small>(R$)</small>
-            </Input>
+              <Input
+                name="cost"
+                label="Custo da sua hora/aula"
+                placeholder="R$"
+                mask="currency"
+                id="cost"
+                setValue={setCost}
+              >
+                <small>(R$)</small>
+              </Input>
+            </div>
           </fieldset>
 
           <fieldset id="schedule-items">
@@ -245,11 +240,11 @@ const TeacherForm: FC = () => {
             <>
               Importante!
               <br />
-              Preencha todos os dados.
+              Preencha todos os dados corretamente.
             </>
           </p>
           <button type="submit" form="create-class">
-            Salvar
+            Salvar cadastro
           </button>
         </footer>
       </main>

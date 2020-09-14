@@ -26,9 +26,10 @@
 }
 
 .page-header .top-bar-container .title {
-  color: var(--color-text-in-primary);
+  font-family: Archivo;
   font-size: 1.6rem;
   font-weight: 500;
+  color: var(--color-text-in-primary);
 }
 
 .page-header .top-bar-container > img {

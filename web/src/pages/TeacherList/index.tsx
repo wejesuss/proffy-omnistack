@@ -2,15 +2,18 @@
 import React, { FC, useState, FormEvent, useEffect } from 'react';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Teacher } from '../../components/TeacherItem';
-
-import './styles.css';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
+import TeacherItem, { Teacher } from '../../components/TeacherItem';
+
 import api from '../../services/api';
 
+import smileIcon from '../../assets/images/icons/smile.svg'
+import './styles.css';
+
 const TeacherList: FC = () => {
-  const [teachers, setTeachers] = useState<Teacher[]>([])
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [teachersIsEmpty, setTeachersIsEmpty] = useState(false);
   const [subjects] = useState([
     {value: "Artes", label: "Artes"},
     {value: "Biologia", label: "Biologia"},
@@ -22,7 +25,7 @@ const TeacherList: FC = () => {
     {value: "Matemática", label: "Matemática"},
     {value: "Português", label: "Português"},
     {value: "Química", label: "Química"}
-  ])
+  ]);
 
   const [subject, setSubject] = useState("");
   const [time, setTime] = useState("");
@@ -31,16 +34,29 @@ const TeacherList: FC = () => {
   async function searchProffys(e: FormEvent) {
     e.preventDefault()
     if(!subject || !time || !week_day) return false
+    let teachers = [] as Teacher[];
 
-    const { data: teachers } = await api.get<Teacher[]>("/classes", {
-      params: {
-        subject,
-        week_day: Number(week_day),
-        time
-      }
-    })
+    try {
+      const results = await api.get<Teacher[]>("/classes", {
+        params: {
+          subject,
+          week_day: Number(week_day),
+          time
+        }
+      });
 
-    setTeachers(teachers)
+      teachers = results.data;
+    } catch (error) {
+      console.error(error);
+    }
+
+    if(teachers.length < 1) {
+      setTeachersIsEmpty(true);
+    } else {
+      setTeachersIsEmpty(false);
+    }
+
+    setTeachers(teachers);
   }
 
   useEffect(() => {
@@ -65,7 +81,14 @@ const TeacherList: FC = () => {
 
   return (
     <div id="page-teacher-list" className="container">
-      <PageHeader title="Estes são os proffys disponíveis">
+      <PageHeader title="Estes são os proffys disponíveis" topBarTitle="Estudar">
+        <div className="total-proffys">
+          <img src={smileIcon} alt="Sorriso"/>
+          <p>
+            Nós temos 32 <br/>
+            professores.
+          </p>
+        </div>
         <form id="search-teachers" onSubmit={searchProffys}>
           <Select
             name="subject"
@@ -104,9 +127,15 @@ const TeacherList: FC = () => {
       </PageHeader>
 
       <main>
-        { teachers.map(teacher => (
+        {teachers.map(teacher => (
           <TeacherItem key={teacher.id} teacher={teacher}/>
         ))}
+
+        {teachersIsEmpty ? (
+          <p className="no-results">Nenhum professor encontrado com sua pesquisa.</p>
+        ) : (
+          <p className="results">Estes são todos os resultados</p>
+        )}
       </main>
     </div>
   );

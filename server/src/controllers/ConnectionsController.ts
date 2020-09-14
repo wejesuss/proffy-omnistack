@@ -7,7 +7,7 @@ class ConnectionsController {
         const totalConnections = await db('connections').count('* as total');
         const { total } = totalConnections[0];
 
-        return res.json({total});
+        return res.json({ total });
     }
 
     async create(req: Request, res: Response) {
