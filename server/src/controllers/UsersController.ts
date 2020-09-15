@@ -1,18 +1,66 @@
 import { Request, Response } from 'express';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import db from '../database/connection';
+import { getToken } from '../services';
 
-interface CreateUserProps {
+interface UserProps {
     name: string;
     surname: string;
     email: string;
     password: string;
 }
 
+interface User {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+    avatar: string;
+    whatsapp: string;
+    bio: string;
+}
+
 class UsersController {
     async login(req: Request, res: Response) {
-        return;
+        const { email, password }: UserProps = req.body;
+
+        if (!email) {
+            return res
+                .status(400)
+                .json('error: do not forget to send the email address');
+        }
+
+        if (!password) {
+            return res
+                .status(400)
+                .json('error: do not forget to send the password');
+        }
+
+        const [user]: User[] = await db('users')
+            .select('*')
+            .where('email', '=', email);
+
+        if (!user) {
+            return res.status(400).json('error: user does not exists');
+        }
+
+        const passwordMatch = await compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(400).json('error: incorrect password');
+        }
+
+        user.password = (undefined as unknown) as string;
+
+        const token = getToken({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            surname: user.surname,
+        });
+
+        return res.json({ user, token });
     }
 
     async create(req: Request, res: Response) {
@@ -21,7 +69,7 @@ class UsersController {
             name,
             password: originalPswd,
             surname,
-        }: CreateUserProps = req.body;
+        }: UserProps = req.body;
 
         const trx = await db.transaction();
 
@@ -30,7 +78,7 @@ class UsersController {
                 await trx.rollback();
                 return res
                     .status(400)
-                    .json({ error: 'do not forget to send all values' });
+                    .json('error: do not forget to send all values');
             }
 
             const [id] = await trx('users')
@@ -39,15 +87,13 @@ class UsersController {
 
             if (id) {
                 await trx.rollback();
-                return res
-                    .status(409)
-                    .json({ error: 'email is already in use' });
+                return res.status(409).json('error: email is already in use');
             }
 
             const password = await hash(originalPswd, 10);
             const defaultValue = '';
 
-            await trx('users').insert({
+            const [user_id] = await trx('users').insert({
                 email,
                 password,
                 name,
@@ -59,14 +105,14 @@ class UsersController {
 
             await trx.commit();
 
-            return res.status(201).send();
+            const key = getToken({ email, name, surname, id: user_id });
+
+            return res.status(201).json({ user_id, key });
         } catch (err) {
             console.error(err);
             await trx.rollback();
 
-            return res
-                .status(500)
-                .json({ error: 'Unexpected error, try again!' });
+            return res.status(500).json('error: Unexpected error, try again!');
         }
     }
 }
