@@ -3,6 +3,9 @@ import { compare, hash } from 'bcrypt';
 
 import db from '../database/connection';
 import { getToken } from '../services';
+import { generateRandomHex } from '../utils/generateRandomHex';
+import sendMail from '../utils/sendMail';
+import { baseForgotEmailText as baseText } from '../resources/mail/forgotPasswordEmail';
 
 interface UserProps {
     name: string;
@@ -29,13 +32,13 @@ class UsersController {
         if (!email) {
             return res
                 .status(400)
-                .json('error: do not forget to send the email address');
+                .json({ error: 'do not forget to send the email address' });
         }
 
         if (!password) {
             return res
                 .status(400)
-                .json('error: do not forget to send the password');
+                .json({ error: 'do not forget to send the password' });
         }
 
         const [user]: User[] = await db('users')
@@ -43,12 +46,12 @@ class UsersController {
             .where('email', '=', email);
 
         if (!user) {
-            return res.status(400).json('error: user does not exists');
+            return res.status(400).json({ error: 'user not found' });
         }
 
         const passwordMatch = await compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(400).json('error: incorrect password');
+            return res.status(400).json({ error: 'incorrect password' });
         }
 
         user.password = (undefined as unknown) as string;
@@ -74,20 +77,15 @@ class UsersController {
         const trx = await db.transaction();
 
         try {
-            if (!email || !name || !originalPswd || !surname) {
-                await trx.rollback();
-                return res
-                    .status(400)
-                    .json('error: do not forget to send all values');
-            }
-
             const [id] = await trx('users')
                 .select('id')
                 .where('email', '=', email);
 
             if (id) {
                 await trx.rollback();
-                return res.status(409).json('error: email is already in use');
+                return res
+                    .status(409)
+                    .json({ error: 'email is already in use' });
             }
 
             const password = await hash(originalPswd, 10);
@@ -112,8 +110,71 @@ class UsersController {
             console.error(err);
             await trx.rollback();
 
-            return res.status(500).json('error: Unexpected error, try again!');
+            return res
+                .status(500)
+                .json({ error: 'Unexpected error, try again' });
         }
+    }
+
+    async forgot(req: Request, res: Response) {
+        const email: string = req.body.email;
+
+        try {
+            if (!email) {
+                return res
+                    .status(400)
+                    .json({ error: 'do not forget to send the email address' });
+            }
+
+            const [user] = await db('users').where('email', '=', email);
+
+            if (!user) {
+                return res.status(400).json({ error: 'user not found' });
+            }
+
+            const token = generateRandomHex(24);
+
+            if (!token) {
+                return res
+                    .status(500)
+                    .json({ error: 'Error on creating token, try again' });
+            }
+
+            const now = new Date();
+            const giveOneHourOfExpiration = now.getHours() + 1;
+            now.setHours(giveOneHourOfExpiration);
+
+            await db('users')
+                .update({
+                    passwordResetToken: token,
+                    passwordResetExpires: now,
+                })
+                .where('id', '=', user.id);
+
+            sendMail({
+                email: {
+                    baseText,
+                    replacers: [email, token],
+                    placeholder: '**',
+                },
+                options: {
+                    from: 'proffy@contato.com',
+                    to: email,
+                    subject: 'Password Reset',
+                },
+            });
+
+            return res.json(token);
+        } catch (error) {
+            console.error(error);
+            return res
+                .status(500)
+                .json({ error: 'Unexpected error, try again' });
+        }
+    }
+
+    async reset(req: Request, res: Response) {
+        return;
     }
 }
 
