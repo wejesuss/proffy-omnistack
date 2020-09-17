@@ -112,7 +112,7 @@ class UsersController {
 
             return res
                 .status(500)
-                .json({ error: 'Unexpected error, try again' });
+                .json({ error: 'unexpected error, try again' });
         }
     }
 
@@ -169,12 +169,61 @@ class UsersController {
             console.error(error);
             return res
                 .status(500)
-                .json({ error: 'Unexpected error, try again' });
+                .json({ error: 'unexpected error, try again' });
         }
     }
 
     async reset(req: Request, res: Response) {
-        return;
+        const { token, email, password: newPassword } = req.body;
+
+        if (!token || !email || !newPassword) {
+            return res.status(400).json({
+                error: 'token, email and newPassword expected, send all values',
+            });
+        }
+
+        const [user] = await db('users').where('email', '=', email);
+
+        if (!user) {
+            return res.status(400).json({ error: 'user not found' });
+        }
+
+        const trx = await db.transaction();
+
+        try {
+            const { passwordResetToken, passwordResetExpires } = user;
+
+            if (token !== passwordResetToken) {
+                await trx.rollback();
+                return res.status(400).json({ error: 'invalid token' });
+            }
+
+            const now = new Date();
+            const elapsedMoreThanOneHour = passwordResetExpires < now.getTime();
+
+            if (elapsedMoreThanOneHour || !passwordResetExpires) {
+                await trx.rollback();
+                return res.status(400).json({ error: 'expired token' });
+            }
+
+            await trx('users')
+                .update({
+                    password: await hash(newPassword, 10),
+                    passwordResetToken: null,
+                    passwordResetExpires: null,
+                })
+                .where('id', '=', user.id);
+
+            await trx.commit();
+
+            return res.send();
+        } catch (err) {
+            console.error(err);
+            await trx.rollback();
+            return res
+                .status(500)
+                .json({ error: 'unexpected error, try again' });
+        }
     }
 }
 
