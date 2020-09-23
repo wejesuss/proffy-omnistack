@@ -25,7 +25,7 @@ interface User {
     bio: string;
 }
 
-class UsersController {
+class SessionController {
     async login(req: Request, res: Response) {
         const { email, password }: UserProps = req.body;
 
@@ -164,7 +164,7 @@ class UsersController {
                 },
             });
 
-            return res.json(token);
+            return res.send();
         } catch (error) {
             console.error(error);
             return res
@@ -227,4 +227,4 @@ class UsersController {
     }
 }
 
-export default new UsersController();
+export default new SessionController();

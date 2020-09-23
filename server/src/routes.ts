@@ -1,15 +1,15 @@
 import express from 'express';
 
-import UsersController from './controllers/UsersController';
+import SessionController from './controllers/SessionController';
 import ClassesController from './controllers/ClassesController';
 import ConnectionsController from './controllers/ConnectionsController';
 
 const routes = express.Router();
 
-routes.post('/users/create', UsersController.create);
-routes.post('/users/login', UsersController.login);
-routes.post('/users/forgot-password', UsersController.forgot);
-routes.post('/users/reset-password', UsersController.reset);
+routes.post('/users/create', SessionController.create);
+routes.post('/users/login', SessionController.login);
+routes.post('/users/forgot-password', SessionController.forgot);
+routes.post('/users/reset-password', SessionController.reset);
 
 routes.get('/classes', ClassesController.index);
 routes.post('/classes', ClassesController.create);
