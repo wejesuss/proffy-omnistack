@@ -7,7 +7,7 @@ import connections from './routes/connections';
 const routes = express.Router();
 
 routes.use('/users', users);
-routes.use('/classess', classes);
+routes.use('/classes', classes);
 routes.use('/connections', connections);
 
 export default routes;
