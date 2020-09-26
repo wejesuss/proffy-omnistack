@@ -62,25 +62,28 @@ class ClassesController {
     }
 
     async create(req: Request, res: Response) {
-        const {
-            name,
-            avatar,
-            whatsapp,
-            bio,
-            cost,
-            subject,
-            schedule,
-        } = req.body;
+        const { email, cost, subject, schedule } = req.body;
+
+        if (!email || !cost || !subject || !schedule) {
+            return res.status(400).json({ error: 'please, send all values' });
+        }
 
         const trx = await db.transaction();
 
         try {
-            const [user_id] = await trx('users').insert({
-                name,
-                avatar,
-                whatsapp,
-                bio,
-            });
+            const user = await trx('users')
+                .select('id')
+                .where('email', '=', email)
+                .first();
+
+            const user_id = user?.id;
+
+            if (!user_id) {
+                await trx.rollback();
+                return res.status(400).json({ error: 'user not found' });
+            }
+
+            await trx('classes').where('user_id', '=', user_id).delete();
 
             const [class_id] = await trx('classes').insert({
                 subject,
