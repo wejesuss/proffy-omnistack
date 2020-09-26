@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import db from '../database/connection';
 import { convertHoursToMinutes } from '../utils/convertHoursToMinutes';
+import { formatScheduleItems } from '../utils/formatScheduleItems';
 
 interface ScheduleItem {
     week_day: number;
@@ -87,14 +88,7 @@ class ClassesController {
                 user_id,
             });
 
-            const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
-                return {
-                    week_day: scheduleItem.week_day,
-                    from: convertHoursToMinutes(scheduleItem.from),
-                    to: convertHoursToMinutes(scheduleItem.to),
-                    class_id,
-                };
-            });
+            const classSchedule = formatScheduleItems(schedule, class_id);
 
             await trx('class_schedule').insert(classSchedule);
 
