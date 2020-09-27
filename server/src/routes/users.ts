@@ -5,7 +5,7 @@ import SessionController from '../controllers/SessionController';
 
 const routes = express.Router();
 
-routes.post('/create', SessionController.create);
+routes.post('/create', UsersController.create);
 routes.put('/edit', UsersController.edit);
 
 routes.post('/login', SessionController.login);

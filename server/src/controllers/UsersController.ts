@@ -1,9 +1,18 @@
 import { Request, Response } from 'express';
+import { hash } from 'bcrypt';
 
+import { getToken } from '../services';
 import db from '../database/connection';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { verifyToken } from '../services/verifyToken';
 import { formatScheduleItems } from '../utils/formatScheduleItems';
+
+interface UserProps {
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+}
 
 interface DecryptedToken {
     id: number;
@@ -27,6 +36,56 @@ interface EditProfileRequest {
 }
 
 class UsersController {
+    async create(req: Request, res: Response) {
+        const {
+            email,
+            name,
+            password: originalPswd,
+            surname,
+        }: UserProps = req.body;
+
+        const trx = await db.transaction();
+
+        try {
+            const [id] = await trx('users')
+                .select('id')
+                .where('email', '=', email);
+
+            if (id) {
+                await trx.rollback();
+                return res
+                    .status(409)
+                    .json({ error: 'email is already in use' });
+            }
+
+            const password = await hash(originalPswd, 10);
+            const defaultValue = '';
+
+            const [user_id] = await trx('users').insert({
+                email,
+                password,
+                name,
+                surname,
+                avatar: defaultValue,
+                whatsapp: defaultValue,
+                bio: defaultValue,
+            });
+
+            await trx.commit();
+
+            const key = getToken({ email, name, surname, id: user_id });
+
+            return res.status(201).json({ user_id, key });
+        } catch (err) {
+            console.error(err);
+            await trx.rollback();
+
+            return res
+                .status(500)
+                .json({ error: 'unexpected error, try again' });
+        }
+    }
+
     async edit(req: Request, res: Response) {
         const {
             whatsapp,
