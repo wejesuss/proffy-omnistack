@@ -5,6 +5,7 @@ import SessionController from '../controllers/SessionController';
 
 const routes = express.Router();
 
+routes.get('/search', UsersController.search);
 routes.post('/create', UsersController.create);
 routes.put('/edit', UsersController.edit);
 
