@@ -36,6 +36,59 @@ interface EditProfileRequest {
 }
 
 class UsersController {
+    async search(req: Request, res: Response) {
+        let token = req.headers.authorization;
+        let code = '';
+
+        if (!token) {
+            return res.status(400).json({ error: 'expected to receive token' });
+        }
+
+        [code, token] = token.split(' ');
+
+        if (code !== 'Bearer' || !token) {
+            return res.status(400).json({ error: 'token malformatted' });
+        }
+
+        try {
+            const verifiedToken: DecryptedToken = verifyToken(token);
+
+            const [user] = await db('classes')
+                .select(
+                    'classes.id as class_id',
+                    'subject',
+                    'cost',
+                    'user_id',
+
+                    'email',
+                    'name',
+                    'surname',
+                    'avatar',
+                    'whatsapp',
+                    'bio'
+                )
+                .join('users', 'classes.user_id', '=', 'users.id')
+                .where('users.id', '=', verifiedToken.id);
+
+            const schedule = await db('class_schedule').where(
+                'class_id',
+                '=',
+                user.class_id
+            );
+
+            return res.json({ user, schedule });
+        } catch (err) {
+            console.error(err);
+            if (err instanceof JsonWebTokenError) {
+                return res.status(400).json({ error: 'invalid token' });
+            }
+
+            return res
+                .status(500)
+                .json({ error: 'unexpected error, try again' });
+        }
+    }
+
     async create(req: Request, res: Response) {
         const {
             email,
