@@ -1,5 +1,5 @@
 import { getToken } from './getToken';
-import { validateKey } from './validateKey';
+import { verifyToken } from './verifyToken';
 import { createMail } from './createMail';
 
-export { getToken, validateKey, createMail };
+export { getToken, verifyToken, createMail };

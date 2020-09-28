@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { hash } from 'bcrypt';
 
-import { getToken } from '../services';
+import { getToken, verifyToken } from '../services';
 import db from '../database/connection';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import { verifyToken } from '../services/verifyToken';
 import { formatScheduleItems } from '../utils/formatScheduleItems';
 
 interface UserProps {
