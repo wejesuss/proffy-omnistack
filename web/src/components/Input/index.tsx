@@ -7,22 +7,29 @@ import { phone, currency } from '../../utils';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  mask?: "phone" | "currency";
+  mask?: 'phone' | 'currency';
   setValue?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Input: React.FC<InputProps> = ({ name, label, mask, setValue, children, ...rest }) => {
+const Input: React.FC<InputProps> = ({
+  name,
+  label,
+  mask,
+  setValue,
+  children,
+  ...rest
+}) => {
   function handleKeyUp(e: FormEvent<HTMLInputElement>) {
-    if(mask === "phone") {
-      let value = phone(e);
-      if(setValue) {
-        setValue(value)
+    if (mask === 'phone') {
+      const value = phone(e);
+      if (setValue) {
+        setValue(value);
       }
     }
 
-    if(mask === "currency") {
-      let value = currency(e);
-      if(setValue) {
+    if (mask === 'currency') {
+      const value = currency(e);
+      if (setValue) {
         setValue(value);
       }
     }
@@ -30,8 +37,11 @@ const Input: React.FC<InputProps> = ({ name, label, mask, setValue, children, ..
 
   return (
     <div className="input-block">
-      <label htmlFor={name}>{label}{children && children}</label>
-      <input type="text" {...rest} onKeyUp={handleKeyUp} />
+      <label htmlFor={name}>
+        {label}
+        {children && children}
+      </label>
+      <input type="text" {...rest} name={name} onKeyUp={handleKeyUp} />
     </div>
   );
 };

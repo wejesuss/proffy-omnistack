@@ -12,10 +12,14 @@ interface SuccessProps {
   buttonText: string;
 }
 
-const Success: React.FC<SuccessProps> = ({ message, messageTitle, buttonText }) => {
+const Success: React.FC<SuccessProps> = ({
+  message,
+  messageTitle,
+  buttonText,
+}: SuccessProps) => {
   const history = useHistory();
   const delayedRedirect = () => {
-    setTimeout(() => history.push("/study"), 3500);
+    setTimeout(() => history.push('/study'), 3500);
   };
 
   return (
@@ -34,7 +38,7 @@ const Success: React.FC<SuccessProps> = ({ message, messageTitle, buttonText }) 
           <Link to="/study">{buttonText}</Link>
         </div>
       </div>
-      { delayedRedirect() }
+      {delayedRedirect()}
     </div>
   );
 };

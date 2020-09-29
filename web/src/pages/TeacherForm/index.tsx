@@ -10,82 +10,96 @@ import Trash from '../../components/Trash';
 
 // import api from '../../services/api';
 
-import warningIcon from '../../assets/images/icons/warning.svg'
-import rocketIcon from '../../assets/images/icons/rocket.svg'
+import warningIcon from '../../assets/images/icons/warning.svg';
+import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
 
 const TeacherForm: FC = () => {
-  const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6])
+  const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [scheduleItems, setScheduleItems] = useState([
-    { week_day: 0, from: '', to: ''}
+    { week_day: 0, from: '', to: '' },
   ]);
-  const [, setWhatsapp] = useState("");
-  const [bio, setBio] = useState("");
-  const [subject, setSubject] = useState("");
-  const [, setCost] = useState("");
+  const [, setWhatsapp] = useState('');
+  const [bio, setBio] = useState('');
+  const [subject, setSubject] = useState('');
+  const [, setCost] = useState('');
 
   const history = useHistory();
 
   function addNewScheduleItem() {
-    const schedules = document.querySelectorAll(".schedule-item")
-    const lastAddedSchedule = schedules[schedules.length - 1]
+    const schedules = document.querySelectorAll('.schedule-item');
+    const lastAddedSchedule = schedules[schedules.length - 1];
 
-    const weekday = (lastAddedSchedule.querySelector(".select-block select") as HTMLSelectElement)?.value
-    const from = (lastAddedSchedule.querySelector(".input-block input.from") as HTMLInputElement)?.value
-    const to = (lastAddedSchedule.querySelector(".input-block input.to") as HTMLInputElement)?.value
+    const weekday = (lastAddedSchedule.querySelector(
+      '.select-block select',
+    ) as HTMLSelectElement)?.value;
+    const from = (lastAddedSchedule.querySelector(
+      '.input-block input.from',
+    ) as HTMLInputElement)?.value;
+    const to = (lastAddedSchedule.querySelector(
+      '.input-block input.to',
+    ) as HTMLInputElement)?.value;
 
-    if(!weekday || !from || !to || scheduleItems.length > 6) {
-      return false
+    if (!weekday || !from || !to || scheduleItems.length > 6) {
+      return;
     }
 
-    let secureDayToUse = 0
+    let secureDayToUse = 0;
 
-    scheduleItems.forEach(schedule => {
-      days.filter(day => {
-        if(day !== schedule.week_day) {
-          secureDayToUse = day
-          return true
-        } else {
-          const arrayOfUsed = days.splice(days.indexOf(schedule.week_day), 1)
-          const newArray = days.filter(day => !arrayOfUsed.includes(day))
-          setDays(newArray)
-          return false
+    scheduleItems.forEach((schedule) => {
+      days.filter((day) => {
+        if (day !== schedule.week_day) {
+          secureDayToUse = day;
+          return true;
         }
-      })
-    })
+        const arrayOfUsed = days.splice(days.indexOf(schedule.week_day), 1);
+        const newArray = days.filter(
+          (usedDay) => !arrayOfUsed.includes(usedDay),
+        );
+        setDays(newArray);
+        return false;
+      });
+    });
 
     setScheduleItems([
       ...scheduleItems,
-      { week_day: secureDayToUse, from: '', to: '' }
-    ])
+      { week_day: secureDayToUse, from: '', to: '' },
+    ]);
   }
 
   function removeScheduleItem(index: number) {
-      const newSchedule = scheduleItems.filter((_, position) => position !== index)
-      setScheduleItems(newSchedule)
-      console.log(scheduleItems, newSchedule)
+    const newSchedule = scheduleItems.filter(
+      (_, position) => position !== index,
+    );
+    setScheduleItems(newSchedule);
+    console.log(scheduleItems, newSchedule);
   }
 
-  function setScheduleItemValue(position: number, field: string, value: string) {
+  function setScheduleItemValue(
+    position: number,
+    field: string,
+    value: string,
+  ) {
     const newSchedule = scheduleItems.map((schedule, index) => {
-      if(index === position) {
-        return {...schedule, [field]: (field === "week_day" ? +value : value)}
+      if (index === position) {
+        return { ...schedule, [field]: field === 'week_day' ? +value : value };
       }
 
-      return schedule
-    })
+      return schedule;
+    });
 
-    setScheduleItems(newSchedule)
+    setScheduleItems(newSchedule);
   }
 
   function handleCreateClass(e: FormEvent) {
     e.preventDefault();
 
-    history.push("/success", {
+    history.push('/success', {
       created: true,
-      messageTitle: "Cadastro salvo!",
-      message: "Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.",
-      buttonText: "Acessar lista"
+      messageTitle: 'Cadastro salvo!',
+      message:
+        'Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.',
+      buttonText: 'Acessar lista',
     });
     // api.post("/classes", {
     //   whatsapp,
@@ -110,9 +124,12 @@ const TeacherForm: FC = () => {
         description="O primeiro passo é preencher esse formulário de incrição"
       >
         <div className="rocket-message">
-          <img src={rocketIcon} alt="Rocket"/>
+          <img src={rocketIcon} alt="Rocket" />
           <p>
-            Preparare-se! <br/>
+            <>
+              Preparare-se!
+              <br />
+            </>
             vai ser o máximo.
           </p>
         </div>
@@ -124,7 +141,10 @@ const TeacherForm: FC = () => {
             <legend>Seu dados</legend>
             <div className="user-container group-container">
               <div className="user-info">
-                <img src="https://github.com/maykbrito.png" alt="Conta do usuário"/>
+                <img
+                  src="https://github.com/maykbrito.png"
+                  alt="Conta do usuário"
+                />
                 Mayk Brito
               </div>
               <Input
@@ -145,7 +165,9 @@ const TeacherForm: FC = () => {
               id="bio"
               maxLength={300}
               value={bio}
-              onChange={(e) => { setBio(e.target.value)}}
+              onChange={(e) => {
+                setBio(e.target.value);
+              }}
             >
               <small>(Máximo 300 caracteres)</small>
             </TextArea>
@@ -155,20 +177,26 @@ const TeacherForm: FC = () => {
             <legend>Sobre a aula</legend>
 
             <div className="group-container">
-              <Select name="subject" label="Matéria" id="subject" options={[
-                  {value: "Artes", label: "Artes"},
-                  {value: "Biologia", label: "Biologia"},
-                  {value: "Ciências", label: "Ciências"},
-                  {value: "Educação Física", label: "Educação Física"},
-                  {value: "Física", label: "Física"},
-                  {value: "Geografia", label: "Geografia"},
-                  {value: "História", label: "História"},
-                  {value: "Matemática", label: "Matemática"},
-                  {value: "Português", label: "Português"},
-                  {value: "Química", label: "Química"}
+              <Select
+                name="subject"
+                label="Matéria"
+                id="subject"
+                options={[
+                  { value: 'Artes', label: 'Artes' },
+                  { value: 'Biologia', label: 'Biologia' },
+                  { value: 'Ciências', label: 'Ciências' },
+                  { value: 'Educação Física', label: 'Educação Física' },
+                  { value: 'Física', label: 'Física' },
+                  { value: 'Geografia', label: 'Geografia' },
+                  { value: 'História', label: 'História' },
+                  { value: 'Matemática', label: 'Matemática' },
+                  { value: 'Português', label: 'Português' },
+                  { value: 'Química', label: 'Química' },
                 ]}
                 value={subject}
-                onChange={(e) => { setSubject(e.target.value)}}
+                onChange={(e) => {
+                  setSubject(e.target.value);
+                }}
               />
 
               <Input
@@ -198,16 +226,18 @@ const TeacherForm: FC = () => {
                   name="week_day"
                   label="Dia da Semana"
                   options={[
-                    {value: "0", label: "Domigo"},
-                    {value: "1", label: "Segunda-feira"},
-                    {value: "2", label: "Terça-feira"},
-                    {value: "3", label: "Quarta-feira"},
-                    {value: "4", label: "Quinta-feira"},
-                    {value: "5", label: "Sexta-feira"},
-                    {value: "6", label: "Sábado"},
+                    { value: '0', label: 'Domigo' },
+                    { value: '1', label: 'Segunda-feira' },
+                    { value: '2', label: 'Terça-feira' },
+                    { value: '3', label: 'Quarta-feira' },
+                    { value: '4', label: 'Quinta-feira' },
+                    { value: '5', label: 'Sexta-feira' },
+                    { value: '6', label: 'Sábado' },
                   ]}
                   value={scheduleItem.week_day}
-                  onChange={(e) => { setScheduleItemValue(index, "week_day", e.target.value)}}
+                  onChange={(e) => {
+                    setScheduleItemValue(index, 'week_day', e.target.value);
+                  }}
                 />
 
                 <Input
@@ -216,7 +246,9 @@ const TeacherForm: FC = () => {
                   type="time"
                   className="from"
                   value={scheduleItem.from}
-                  onChange={(e) => { setScheduleItemValue(index, "from", e.target.value)}}
+                  onChange={(e) => {
+                    setScheduleItemValue(index, 'from', e.target.value);
+                  }}
                 />
                 <Input
                   name="to"
@@ -224,7 +256,9 @@ const TeacherForm: FC = () => {
                   type="time"
                   className="to"
                   value={scheduleItem.to}
-                  onChange={(e) => { setScheduleItemValue(index, "to", e.target.value)}}
+                  onChange={(e) => {
+                    setScheduleItemValue(index, 'to', e.target.value);
+                  }}
                 />
                 {index > 0 && (
                   <Trash removeScheduleItem={() => removeScheduleItem(index)} />

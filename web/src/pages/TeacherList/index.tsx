@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC, useState, FormEvent, useEffect } from 'react';
 
@@ -8,84 +9,93 @@ import TeacherItem, { Teacher } from '../../components/TeacherItem';
 
 import api from '../../services/api';
 
-import smileIcon from '../../assets/images/icons/smile.svg'
+import smileIcon from '../../assets/images/icons/smile.svg';
 import './styles.css';
 
 const TeacherList: FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [teachersIsEmpty, setTeachersIsEmpty] = useState(false);
   const [subjects] = useState([
-    {value: "Artes", label: "Artes"},
-    {value: "Biologia", label: "Biologia"},
-    {value: "Ciências", label: "Ciências"},
-    {value: "Educação Física", label: "Educação Física"},
-    {value: "Física", label: "Física"},
-    {value: "Geografia", label: "Geografia"},
-    {value: "História", label: "História"},
-    {value: "Matemática", label: "Matemática"},
-    {value: "Português", label: "Português"},
-    {value: "Química", label: "Química"}
+    { value: 'Artes', label: 'Artes' },
+    { value: 'Biologia', label: 'Biologia' },
+    { value: 'Ciências', label: 'Ciências' },
+    { value: 'Educação Física', label: 'Educação Física' },
+    { value: 'Física', label: 'Física' },
+    { value: 'Geografia', label: 'Geografia' },
+    { value: 'História', label: 'História' },
+    { value: 'Matemática', label: 'Matemática' },
+    { value: 'Português', label: 'Português' },
+    { value: 'Química', label: 'Química' },
   ]);
 
-  const [subject, setSubject] = useState("");
-  const [time, setTime] = useState("");
-  const [week_day, setWeekday] = useState("");
+  const [subject, setSubject] = useState('');
+  const [time, setTime] = useState('');
+  const [week_day, setWeekday] = useState('');
 
   async function searchProffys(e: FormEvent) {
-    e.preventDefault()
-    if(!subject || !time || !week_day) return false
-    let teachers = [] as Teacher[];
+    e.preventDefault();
+    if (!subject || !time || !week_day) return;
+    let newTeachers = [] as Teacher[];
 
     try {
-      const results = await api.get<Teacher[]>("/classes", {
+      const results = await api.get<Teacher[]>('/classes', {
         params: {
           subject,
           week_day: Number(week_day),
-          time
-        }
+          time,
+        },
       });
 
-      teachers = results.data;
+      newTeachers = results.data;
     } catch (error) {
       console.error(error);
     }
 
-    if(teachers.length < 1) {
+    if (newTeachers.length < 1) {
       setTeachersIsEmpty(true);
     } else {
       setTeachersIsEmpty(false);
     }
 
-    setTeachers(teachers);
+    setTeachers(newTeachers);
   }
 
   useEffect(() => {
-    const today = new Date(Date.now())
-    const weekday = today.getDay()
-    const now = `${today.getHours()}:${today.getMinutes()}`
+    const today = new Date(Date.now());
+    const weekday = today.getDay();
+    const now = `${today.getHours()}:${today.getMinutes()}`;
 
-    subjects.forEach(subject => {
-      api.get<Teacher[]>("/classes", {
-        params: {
-          subject: subject.value,
-          week_day: weekday,
-          time: now
-        }
-      }).then((response) => {
-        setTeachers(teachers => teachers.concat(response.data))
-      }).catch((reason) => {
-        console.error(reason)
-      })
-    })
-  }, [subjects])
+    subjects.forEach(({ value }) => {
+      api
+        .get<Teacher[]>('/classes', {
+          params: {
+            subject: value,
+            week_day: weekday,
+            time: now,
+          },
+        })
+        .then((response) => {
+          setTeachers((oldTeachers) => oldTeachers.concat(response.data));
+        })
+        .catch((reason) => {
+          console.error(reason);
+        });
+    });
+  }, [subjects]);
 
   return (
     <div id="page-teacher-list" className="container">
-      <PageHeader title="Estes são os proffys disponíveis" topBarTitle="Estudar">
+      <PageHeader
+        title="Estes são os proffys disponíveis"
+        topBarTitle="Estudar"
+      >
         <div className="total-proffys">
-          <img src={smileIcon} alt="Sorriso"/>
+          <img src={smileIcon} alt="Sorriso" />
           <p>
-            Nós temos 32 <br/>
+            <>
+              Nós temos 32
+              <br />
+            </>
             professores.
           </p>
         </div>
@@ -102,13 +112,13 @@ const TeacherList: FC = () => {
             name="week_day"
             label="Dia da Semana"
             options={[
-              {value: "0", label: "Domigo"},
-              {value: "1", label: "Segunda-feira"},
-              {value: "2", label: "Terça-feira"},
-              {value: "3", label: "Quarta-feira"},
-              {value: "4", label: "Quinta-feira"},
-              {value: "5", label: "Sexta-feira"},
-              {value: "6", label: "Sábado"},
+              { value: '0', label: 'Domigo' },
+              { value: '1', label: 'Segunda-feira' },
+              { value: '2', label: 'Terça-feira' },
+              { value: '3', label: 'Quarta-feira' },
+              { value: '4', label: 'Quinta-feira' },
+              { value: '5', label: 'Sexta-feira' },
+              { value: '6', label: 'Sábado' },
             ]}
             value={week_day}
             onChange={(e) => setWeekday(e.target.value)}
@@ -127,12 +137,14 @@ const TeacherList: FC = () => {
       </PageHeader>
 
       <main>
-        {teachers.map(teacher => (
-          <TeacherItem key={teacher.id} teacher={teacher}/>
+        {teachers.map((teacher) => (
+          <TeacherItem key={teacher.id} teacher={teacher} />
         ))}
 
         {teachersIsEmpty ? (
-          <p className="no-results">Nenhum professor encontrado com sua pesquisa.</p>
+          <p className="no-results">
+            Nenhum professor encontrado com sua pesquisa.
+          </p>
         ) : (
           <p className="results">Estes são todos os resultados</p>
         )}

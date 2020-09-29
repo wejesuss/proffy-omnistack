@@ -20,36 +20,51 @@ const Routes: FC = () => {
       <Route path="/" exact component={Landing} />
       <Route path="/study" exact component={TeacherList} />
       <Route path="/give-classes" exact component={TeacherForm} />
-      <Route path="/login" exact render={() => {
-        if(localStorage.getItem('JWT')) {
-          return <Redirect to="/study" />
-        }
+      <Route
+        path="/login"
+        exact
+        render={() => {
+          if (localStorage.getItem('JWT')) {
+            return <Redirect to="/study" />;
+          }
 
-        return <Landing />
-      }} />
-      <Route path="/signup" exact render={() => {
-        if(localStorage.getItem('JWT')) {
-          return <Redirect to="/study" />
-        }
+          return <Landing />;
+        }}
+      />
+      <Route
+        path="/signup"
+        exact
+        render={() => {
+          if (localStorage.getItem('JWT')) {
+            return <Redirect to="/study" />;
+          }
 
-        return <Landing />
-      }} />
-      <Route path="/forgot-pswd" exact render={() => {
-        if(localStorage.getItem('JWT')) {
-          return <Redirect to="/study" />
-        }
+          return <Landing />;
+        }}
+      />
+      <Route
+        path="/forgot-pswd"
+        exact
+        render={() => {
+          if (localStorage.getItem('JWT')) {
+            return <Redirect to="/study" />;
+          }
 
-        return <ForgotPassword />
-      }} />
-      <Route path="/success" exact render={(props) => {
-        const successProps = props.location.state as StateProps;
+          return <ForgotPassword />;
+        }}
+      />
+      <Route
+        path="/success"
+        exact
+        render={({ location }) => {
+          const successProps = location.state as StateProps;
 
-        if((successProps)?.created) {
-          return <Success {...successProps} />
-        } else {
-          return <Redirect to="/" />
-        }
-      }} />
+          if (successProps?.created) {
+            return <Success {...successProps} />;
+          }
+          return <Redirect to="/" />;
+        }}
+      />
     </BrowserRouter>
   );
 };

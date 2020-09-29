@@ -21,9 +21,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         <Link to="/">
           <img src={backIcon} alt="Voltar" />
         </Link>
-        {props.topBarTitle && (
-          <h1 className="title">{props.topBarTitle}</h1>
-        )}
+        {props.topBarTitle && <h1 className="title">{props.topBarTitle}</h1>}
         <img src={logoImg} alt="Logo Proffy" />
       </div>
       <div className="header-content">
