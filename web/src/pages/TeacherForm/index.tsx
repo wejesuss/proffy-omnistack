@@ -95,11 +95,12 @@ const TeacherForm: FC = () => {
     e.preventDefault();
 
     history.push('/success', {
-      created: true,
+      success: true,
       messageTitle: 'Cadastro salvo!',
       message:
         'Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.',
       buttonText: 'Acessar lista',
+      buttonLink: '/study',
     });
     // api.post("/classes", {
     //   whatsapp,

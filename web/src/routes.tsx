@@ -6,12 +6,14 @@ import TeacherList from './pages/TeacherList';
 import TeacherForm from './pages/TeacherForm';
 import Success from './pages/Success';
 import ForgotPassword from './pages/ForgotPassword';
+import Login from './pages/Login';
 
 interface StateProps {
-  created?: boolean;
+  success?: boolean;
   messageTitle: string;
   message: string;
   buttonText: string;
+  buttonLink: string;
 }
 
 const Routes: FC = () => {
@@ -28,7 +30,7 @@ const Routes: FC = () => {
             return <Redirect to="/study" />;
           }
 
-          return <Landing />;
+          return <Login />;
         }}
       />
       <Route
@@ -59,7 +61,7 @@ const Routes: FC = () => {
         render={({ location }) => {
           const successProps = location.state as StateProps;
 
-          if (successProps?.created) {
+          if (successProps?.success) {
             return <Success {...successProps} />;
           }
           return <Redirect to="/" />;
