@@ -1,12 +1,14 @@
 import React, { FormEvent, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+import api from '../../services/api';
+import { getErrorMessage } from '../../utils';
 
 import Input from '../../components/Input';
+import LogoContainer from '../../components/LogoContainer';
 
-import logoImg from '../../assets/images/logo.svg';
-import backIcon from '../../assets/images/icons/back.svg';
 import './styles.css';
-import api from '../../services/api';
+import ControlContainer from '../../components/ControlContainer';
 
 const ForgotPassword: React.FC = () => {
   const history = useHistory();
@@ -20,22 +22,24 @@ const ForgotPassword: React.FC = () => {
       })
       .then(
         () => {
-          alert('enviamos um email para você');
-          history.push('/login');
+          history.push('/success', {
+            success: true,
+            messageTitle: 'Redefinição enviada!',
+            message:
+              'Boa, agora é só checar o e-mail que foi enviado para você redefinir sua senha e aproveitar os estudos.',
+            buttonText: 'Voltar ao login',
+            buttonLink: '/login',
+          });
         },
         (reason) => {
-          alert(reason.response.data.error);
+          alert(getErrorMessage(reason?.response?.data?.error) || reason);
         },
       );
   }
 
   return (
     <div id="page-forgot-password">
-      <div id="forgot-password">
-        <Link to="/login">
-          <img src={backIcon} alt="Voltar" />
-        </Link>
-
+      <ControlContainer pageId="forgot-password" backLink="/login">
         <form onSubmit={handleFormSubmit}>
           <fieldset>
             <legend>
@@ -45,6 +49,7 @@ const ForgotPassword: React.FC = () => {
                 sua senha?
               </>
             </legend>
+
             <Input
               name="email"
               label="Não esquenta, vamos dar um jeito nisso."
@@ -53,22 +58,13 @@ const ForgotPassword: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+
             <button type="submit">Enviar</button>
           </fieldset>
         </form>
-      </div>
-      <div id="logo-container">
-        <div className="logo">
-          <img src={logoImg} alt="Logo Proffy" />
-          <h2>
-            <>
-              Sua plataforma de
-              <br />
-            </>
-            estudos online
-          </h2>
-        </div>
-      </div>
+      </ControlContainer>
+
+      <LogoContainer />
     </div>
   );
 };
