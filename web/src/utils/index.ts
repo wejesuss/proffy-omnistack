@@ -1,20 +1,30 @@
-import { FormEvent } from "react";
+import { FormEvent } from 'react';
 
-export function phone(e: FormEvent<HTMLInputElement>) {
+export function phone(e: FormEvent<HTMLInputElement>): string {
   e.currentTarget.maxLength = 15;
-  let value = e.currentTarget.value.replace(/\D/g, "");
-  value = value.replace(/^(\(?\d{2}\)?)(\d{5})(\d{4})/g, "($1) $2-$3");
+  let value = e.currentTarget.value.replace(/\D/g, '');
+  value = value.replace(/^(\(?\d{2}\)?)(\d{5})(\d{4})/g, '($1) $2-$3');
   e.currentTarget.value = value;
   return value;
 }
 
-export function currency(e: FormEvent<HTMLInputElement>) {
-  let value = e.currentTarget.value.replace(/\D/g, "");
+export function currency(e: FormEvent<HTMLInputElement>): string {
+  let value = e.currentTarget.value.replace(/\D/g, '');
   value = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL'
-  }).format(+value/100);
+    currency: 'BRL',
+  }).format(+value / 100);
 
   e.currentTarget.value = value;
   return value;
+}
+
+export function getErrorMessage(m: string): string | undefined {
+  const errors = {
+    'user not found': 'Usuário não encontrado',
+  };
+
+  type Mapped = keyof typeof errors;
+
+  return errors[m as Mapped];
 }
