@@ -6,6 +6,7 @@ import { phone, currency } from '../../utils';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  upLabel?: { active: boolean };
   name: string;
   mask?: 'phone' | 'currency';
   setValue?: React.Dispatch<React.SetStateAction<string>>;
@@ -14,11 +15,13 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<InputProps> = ({
   name,
   label,
+  upLabel,
   mask,
   setValue,
   children,
   ...rest
 }) => {
+  console.log(upLabel);
   function handleKeyUp(e: FormEvent<HTMLInputElement>) {
     if (mask === 'phone') {
       const value = phone(e);
@@ -37,7 +40,10 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="input-block">
-      <label htmlFor={name}>
+      <label
+        htmlFor={name}
+        className={upLabel ? `upLabel${upLabel.active ? ' up' : ''}` : ''}
+      >
         {label}
         {children && children}
       </label>

@@ -11,6 +11,20 @@
   font-size: 1.4rem;
 }
 
+.input-block label.upLabel {
+  position: absolute;
+  padding: 0 1.6rem;
+  font-size: 1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+}
+
+.input-block label.upLabel.up {
+  font-size: 1.4rem;
+  top: 20%;
+}
+
 .input-block input {
   width: 100%;
   height: 5.6rem;
