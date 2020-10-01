@@ -5,23 +5,26 @@ import './styles.css';
 import { phone, currency } from '../../utils';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  leftBar?: boolean;
   label: string;
   upLabel?: { active: boolean };
   name: string;
   mask?: 'phone' | 'currency';
   setValue?: React.Dispatch<React.SetStateAction<string>>;
+  symbol?: React.ReactNode;
 }
 
 const Input: React.FC<InputProps> = ({
+  leftBar = false,
   name,
   label,
   upLabel,
   mask,
   setValue,
   children,
+  symbol,
   ...rest
 }) => {
-  console.log(upLabel);
   function handleKeyUp(e: FormEvent<HTMLInputElement>) {
     if (mask === 'phone') {
       const value = phone(e);
@@ -39,7 +42,7 @@ const Input: React.FC<InputProps> = ({
   }
 
   return (
-    <div className="input-block">
+    <div className={leftBar ? 'input-block left-bar' : 'input-block'}>
       <label
         htmlFor={name}
         className={upLabel ? `upLabel${upLabel.active ? ' up' : ''}` : ''}
@@ -47,7 +50,10 @@ const Input: React.FC<InputProps> = ({
         {label}
         {children && children}
       </label>
+
       <input type="text" {...rest} name={name} onKeyUp={handleKeyUp} />
+
+      {symbol && <div className="symbol">{symbol}</div>}
     </div>
   );
 };

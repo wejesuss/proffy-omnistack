@@ -9,6 +9,9 @@
 
 .input-block label {
   font-size: 1.4rem;
+  font-weight: normal;
+  display: block;
+  color: var(--color-text-complement);
 }
 
 .input-block label.upLabel {
@@ -23,6 +26,7 @@
 .input-block label.upLabel.up {
   font-size: 1.4rem;
   top: 20%;
+  color: var(--color-small-info);
 }
 
 .input-block input {
@@ -37,6 +41,22 @@
   font: 1.6rem Archivo;
 }
 
+.input-block input[type="password"] {
+  padding: 0 5.6rem 0 1.6rem;
+}
+
+.input-block .symbol {
+  position: absolute;
+  right: 2.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+}
+
+.input-block .symbol button {
+  background: transparent;
+}
+
 .input-block:focus-within::after {
   content: '';
   width: calc(100% - 3.2rem);
@@ -46,4 +66,13 @@
   left: 1.6rem;
   right: 1.6rem;
   bottom: 0;
+}
+
+.input-block.left-bar:focus-within::after {
+  width: 2px;
+  height: calc(100% - 2rem);
+  top: 1rem;
+  bottom: 1rem;
+  left: 1px;
+  right: unset;
 }
