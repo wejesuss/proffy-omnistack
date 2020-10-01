@@ -142,12 +142,10 @@ fieldset + fieldset {
   background-color: var(--color-secondary-dark);
 }
 
-.select-block label,
-.input-block label,
-.textarea-block label {
-  display: block;
+#page-give-classes .select-block label,
+#page-give-classes .input-block label,
+#page-give-classes .textarea-block label {
   margin-bottom: 0.8rem;
-  color: var(--color-text-complement);
   font-weight: 700;
 }
 

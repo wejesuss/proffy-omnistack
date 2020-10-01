@@ -8,6 +8,8 @@
 
 .select-block label {
   font-size: 1.4rem;
+  display: block;
+  color: var(--color-text-complement);
 }
 
 .select-block select {
