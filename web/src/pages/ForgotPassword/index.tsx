@@ -50,10 +50,13 @@ const ForgotPassword: React.FC = () => {
               </>
             </legend>
 
+            <p>Não esquenta, vamos dar um jeito nisso.</p>
+
             <Input
+              id="email"
               name="email"
-              label="Não esquenta, vamos dar um jeito nisso."
-              placeholder="E-mail"
+              label="E-mail"
+              upLabel={{ active: !!email }}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
