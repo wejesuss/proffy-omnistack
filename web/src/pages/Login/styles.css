@@ -126,14 +126,41 @@
   color: var(--color-title-in-primary);
 }
 
+#page-login #login .message {
+  color: brown;
+  font-size: 1.4rem;
+}
+
+#page-login #login .create-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8rem;
+}
+
+#page-login #login p {
+  color: #6A6180;
+}
+
+#page-login #login .create-account a {
+  margin: 0;
+  font-weight: 600;
+  color: #8257E5;
+}
+
+#page-login #login .create-account p:nth-child(2) {
+  margin-left: 12rem;
+  font-size: 1.4rem;
+  color: #9C98A6;
+}
+
+#page-login #login .create-account img {
+  margin-left: .8rem;
+}
+
 @media (min-width: 700px) {
   #page-login {
     grid-template-columns: 1fr 1fr;
-  }
-
-  #page-login #login form {
-    display: flex;
-    align-items: flex-end;
   }
 }
 

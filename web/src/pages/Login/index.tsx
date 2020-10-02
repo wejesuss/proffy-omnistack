@@ -1,8 +1,8 @@
 import React, { FormEvent, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-// import api from '../../services/api';
-// import { getErrorMessage } from '../../utils';
+import api from '../../services/api';
+import { getErrorMessage } from '../../utils';
 
 import Input from '../../components/Input';
 import LogoContainer from '../../components/LogoContainer';
@@ -10,17 +10,64 @@ import ControlContainer from '../../components/ControlContainer';
 
 import shownPassIcon from '../../assets/images/icons/show-password.svg';
 import hidedPassIcon from '../../assets/images/icons/hide-password.svg';
+import heartIcon from '../../assets/images/icons/purple-heart.svg';
 import './styles.css';
 
+interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    avatar: string;
+    bio: string;
+    whatsapp: string;
+  };
+}
+
 const Login: React.FC = () => {
-  // const history = useHistory();
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
+    setMessage('');
+
+    const credentials = {
+      email,
+      password,
+    };
+
+    api
+      .post<LoginResponse>('/users/login', credentials)
+      .then((res) => {
+        localStorage.clear();
+        sessionStorage.clear();
+        const { token, user } = res.data;
+
+        if (remember) {
+          localStorage.setItem('remember', 'true');
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+        } else {
+          localStorage.setItem('remember', 'false');
+          sessionStorage.setItem('token', token);
+          sessionStorage.setItem('user', JSON.stringify(user));
+        }
+
+        history.push('/');
+      })
+      .catch((reason) => {
+        console.log(reason?.response?.data?.error);
+        setMessage(
+          getErrorMessage(reason?.response?.data?.error || reason.message),
+        );
+      });
   }
 
   return (
@@ -99,6 +146,24 @@ const Login: React.FC = () => {
             >
               Entrar
             </button>
+
+            <p className="message">{message}</p>
+
+            <div className="create-account">
+              <p>
+                <>
+                  Não tem conta?
+                  <br />
+                  <Link to="/signup">Cadastre-se</Link>
+                </>
+              </p>
+              <p>
+                <>
+                  É de graça
+                  <img src={heartIcon} alt="Coração Roxo" />
+                </>
+              </p>
+            </div>
           </fieldset>
         </form>
       </ControlContainer>
