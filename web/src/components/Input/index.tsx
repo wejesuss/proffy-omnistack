@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { InputHTMLAttributes, FormEvent } from 'react';
+import React, { InputHTMLAttributes, FormEvent, memo } from 'react';
 
 import './styles.css';
 import { phone, currency } from '../../utils';
@@ -58,4 +57,4 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default memo(Input);
