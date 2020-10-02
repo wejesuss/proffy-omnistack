@@ -13,6 +13,7 @@ import ControlContainer from '../../components/ControlContainer';
 const ForgotPassword: React.FC = () => {
   const history = useHistory();
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
@@ -32,7 +33,7 @@ const ForgotPassword: React.FC = () => {
           });
         },
         (reason) => {
-          alert(getErrorMessage(reason?.response?.data?.error) || reason);
+          setMessage(getErrorMessage(reason?.response?.data?.error) || reason);
         },
       );
   }
@@ -70,6 +71,7 @@ const ForgotPassword: React.FC = () => {
               Enviar
             </button>
 
+            <p className="message">{message}</p>
           </fieldset>
         </form>
       </ControlContainer>
