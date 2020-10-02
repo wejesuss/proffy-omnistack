@@ -19,12 +19,14 @@ export function currency(e: FormEvent<HTMLInputElement>): string {
   return value;
 }
 
-export function getErrorMessage(m: string): string | undefined {
+export function getErrorMessage(m: string): string {
   const errors = {
     'user not found': 'Usuário não encontrado',
+    'incorrect password': 'Senha incorreta',
+    'unexpected error, try again': 'Erro inesperado, tente novamente',
   };
 
   type Mapped = keyof typeof errors;
 
-  return errors[m as Mapped];
+  return errors[m as Mapped] || m;
 }
