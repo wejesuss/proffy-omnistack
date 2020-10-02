@@ -62,7 +62,14 @@ const ForgotPassword: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <button type="submit">Enviar</button>
+            <button
+              type="submit"
+              disabled={!email}
+              className={email ? 'active' : ''}
+            >
+              Enviar
+            </button>
+
           </fieldset>
         </form>
       </ControlContainer>

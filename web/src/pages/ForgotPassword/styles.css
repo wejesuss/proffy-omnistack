@@ -69,6 +69,11 @@
   color: var(--color-text-complement);
 }
 
+#page-forgot-password #forgot-password button[type="submit"].active {
+  background-color: var(--color-secondary);
+  color: var(--color-title-in-primary);
+}
+
 @media (min-width: 700px) {
   #page-forgot-password {
     grid-template-columns: 1fr 1fr;
