@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
 import Landing from './pages/Landing';
@@ -16,7 +16,7 @@ interface StateProps {
   buttonLink: string;
 }
 
-const Routes: FC = () => {
+const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Route path="/" exact component={Landing} />
