@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -56,14 +55,22 @@ const Landing: React.FC = () => {
 
         <div className="greeting">
           <h2>
-            Seja bem vindo! <br />
-            <strong>O que deseja?</strong>
+            <>
+              Seja bem vindo!
+              <br />
+              <strong>O que deseja?</strong>
+            </>
           </h2>
           <span className="total-connections">
-            Total de
-            <strong> {total} </strong>
-            conexões <br /> já realizadas{' '}
-            <img src={purpleHeartIcon} alt="Coração Roxo" />
+            <>
+              Total de
+              <strong>{total}</strong>
+              conexões
+              <br />
+              já realizadas
+              {'  '}
+              <img src={purpleHeartIcon} alt="Coração Roxo" />
+            </>
           </span>
         </div>
       </div>
