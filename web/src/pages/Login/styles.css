@@ -45,6 +45,10 @@
   height: 6.4rem;
 }
 
+#page-login #login input {
+  padding: 0 5.6rem 0 1.6rem;
+}
+
 #page-login #login input,
 #page-login #login label,
 #page-login #login .input-block + .input-block {
