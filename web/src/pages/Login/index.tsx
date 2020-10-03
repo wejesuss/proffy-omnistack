@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
@@ -46,29 +46,37 @@ const Login: React.FC = () => {
     api
       .post<LoginResponse>('/users/login', credentials)
       .then((res) => {
-        localStorage.clear();
-        sessionStorage.clear();
         const { token, user } = res.data;
+        const now = new Date();
 
+        localStorage.setItem('user', btoa(JSON.stringify(user)));
         if (remember) {
           localStorage.setItem('remember', 'true');
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(user));
+
+          now.setDate(now.getDate() + 7);
+          document.cookie = `token=${token}; expires=${now.toUTCString()}`;
         } else {
           localStorage.setItem('remember', 'false');
-          sessionStorage.setItem('token', token);
-          sessionStorage.setItem('user', JSON.stringify(user));
+
+          now.setDate(now.getDate() + 2);
+          document.cookie = `token=${token}; expires=${now.toUTCString()}`;
         }
 
         history.push('/');
       })
       .catch((reason) => {
-        console.log(reason?.response?.data?.error);
+        console.error(reason?.response?.data?.error);
+        setPassword('');
         setMessage(
           getErrorMessage(reason?.response?.data?.error || reason.message),
         );
       });
   }
+
+  useEffect(() => {
+    localStorage.clear();
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+  }, []);
 
   return (
     <div id="page-login">
