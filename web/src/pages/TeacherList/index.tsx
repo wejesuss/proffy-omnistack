@@ -141,11 +141,13 @@ const TeacherList: FC = () => {
           <TeacherItem key={teacher.id} teacher={teacher} />
         ))}
 
-        {teachersIsEmpty ? (
+        {teachersIsEmpty && (
           <p className="no-results">
             Nenhum professor encontrado com sua pesquisa.
           </p>
-        ) : (
+        )}
+
+        {teachers.length > 0 && (
           <p className="results">Estes são todos os resultados</p>
         )}
       </main>
