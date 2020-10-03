@@ -15,6 +15,7 @@ import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
 
 const TeacherForm: FC = () => {
+  const [user] = useState(JSON.parse(atob(localStorage.getItem('user') || '')));
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [scheduleItems, setScheduleItems] = useState([
     { week_day: 0, from: '', to: '' },
@@ -142,11 +143,10 @@ const TeacherForm: FC = () => {
             <legend>Seu dados</legend>
             <div className="user-container group-container">
               <div className="user-info">
-                <img
-                  src="https://github.com/maykbrito.png"
-                  alt="Conta do usuário"
-                />
-                Mayk Brito
+                <img src={user.avatar} alt="Conta do usuário" />
+                {user.name}
+                {'  '}
+                {user.surname}
               </div>
               <Input
                 label="Whatsapp"

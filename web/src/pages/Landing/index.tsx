@@ -13,6 +13,7 @@ import './styles.css';
 import UserHeader from '../../components/UserHeader';
 
 const Landing: React.FC = () => {
+  const [user] = useState(JSON.parse(atob(localStorage.getItem('user') || '')));
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -25,10 +26,7 @@ const Landing: React.FC = () => {
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
-        <UserHeader
-          name="Mayk Brito"
-          image="https://github.com/maykbrito.png"
-        />
+        <UserHeader name={`${user.name} ${user.surname}`} image={user.avatar} />
 
         <div className="logo-container">
           <img src={logoImg} alt="Logo Proffy" />
