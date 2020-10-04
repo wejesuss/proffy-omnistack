@@ -14,17 +14,6 @@ interface UserProps {
     password: string;
 }
 
-interface User {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    password: string;
-    avatar: string;
-    whatsapp: string;
-    bio: string;
-}
-
 class SessionController {
     async login(req: Request, res: Response) {
         const { email, password }: UserProps = req.body;
@@ -41,8 +30,16 @@ class SessionController {
                 .json({ error: 'do not forget to send the password' });
         }
 
-        const [user]: User[] = await db('users')
-            .select('*')
+        const [user] = await db('users')
+            .select(
+                'id',
+                'email',
+                'name',
+                'surname',
+                'avatar',
+                'whatsapp',
+                'bio'
+            )
             .where('email', '=', email);
 
         if (!user) {
@@ -53,8 +50,6 @@ class SessionController {
         if (!passwordMatch) {
             return res.status(400).json({ error: 'incorrect password' });
         }
-
-        user.password = (undefined as unknown) as string;
 
         const token = getToken({
             id: user.id,
