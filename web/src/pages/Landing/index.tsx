@@ -28,7 +28,20 @@ const Landing: React.FC = () => {
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
-        <UserHeader name={`${user.name} ${user.surname}`} image={user.avatar} />
+        {user.avatar ? (
+          <UserHeader
+            name={`${user.name} ${user.surname}`}
+            image={user.avatar}
+          />
+        ) : (
+          <div className="user-container">
+            <div className="user" />
+
+            <Link to="/login" className="login">
+              Log in
+            </Link>
+          </div>
+        )}
 
         <div className="logo-container">
           <img src={logoImg} alt="Logo Proffy" />

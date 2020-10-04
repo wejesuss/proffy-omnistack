@@ -61,6 +61,16 @@
   stroke: var(--color-small-info);
 }
 
+#page-landing-content .user-container .login {
+  text-decoration: none;
+  color: var(--color-line-in-white);
+  transition: all .2s;
+}
+
+#page-landing-content .user-container .login:hover {
+  color: var(--color-text-in-primary);
+}
+
 .logo-container img {
   height: 10rem;
 }
