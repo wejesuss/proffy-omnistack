@@ -111,16 +111,16 @@ class UsersController {
             }
 
             const password = await hash(originalPswd, 10);
-            const defaultValue = '';
+            const defaultAvatar = '/no_profile.jpg';
 
             const [user_id] = await trx('users').insert({
                 email,
                 password,
                 name,
                 surname,
-                avatar: defaultValue,
-                whatsapp: defaultValue,
-                bio: defaultValue,
+                avatar: defaultAvatar,
+                whatsapp: '',
+                bio: '',
             });
 
             await trx.commit();
