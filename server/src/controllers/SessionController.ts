@@ -31,37 +31,48 @@ class SessionController {
                 .json({ error: 'do not forget to send the password' });
         }
 
-        const [user] = await db('users')
-            .select(
-                'id',
-                'email',
-                'name',
-                'surname',
-                'avatar',
-                'whatsapp',
-                'bio'
-            )
-            .where('email', '=', email);
+        try {
+            const [user] = await db('users')
+                .select(
+                    'id',
+                    'email',
+                    'name',
+                    'surname',
+                    'avatar',
+                    'whatsapp',
+                    'bio',
+                    'password'
+                )
+                .where('email', '=', email);
 
-        if (!user) {
-            return res.status(400).json({ error: 'user not found' });
+            if (!user) {
+                return res.status(400).json({ error: 'user not found' });
+            }
+
+            const passwordMatch = await compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(400).json({ error: 'incorrect password' });
+            }
+
+            const token = getToken({
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                surname: user.surname,
+            });
+
+            user.avatar = `http://${getMyIPAddress('Wi-Fi').address}:3333/${
+                user.avatar
+            }`;
+            user.password = undefined;
+
+            return res.json({ user, token });
+        } catch (err) {
+            console.error(err);
+            return res
+                .status(500)
+                .json({ error: 'unexpected error, try again' });
         }
-
-        const passwordMatch = await compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(400).json({ error: 'incorrect password' });
-        }
-
-        const token = getToken({
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            surname: user.surname,
-        });
-
-        user.avatar = `http://${getMyIPAddress('Wi-Fi').address}:3333`;
-
-        return res.json({ user, token });
     }
 
     async forgot(req: Request, res: Response) {
