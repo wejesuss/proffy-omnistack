@@ -1,3 +1,5 @@
+/* eslint-disable react/no-danger */
+/* eslint-disable camelcase */
 import React from 'react';
 
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
@@ -22,9 +24,9 @@ interface TeacherProps {
 
 const TeacherItem: React.FC<TeacherProps> = ({ teacher }) => {
   function createNewConnection() {
-    api.post("/connections", {
-      user_id: teacher.user_id
-    })
+    api.post('/connections', {
+      user_id: teacher.user_id,
+    });
   }
 
   return (
@@ -37,18 +39,28 @@ const TeacherItem: React.FC<TeacherProps> = ({ teacher }) => {
         </div>
       </header>
 
-      <p dangerouslySetInnerHTML={{ __html: teacher.bio.replace(/(\r\n)?(\n)/g, "<br />") }}>
-      </p>
+      <p
+        dangerouslySetInnerHTML={{
+          __html: teacher.bio.replace(/(\r\n)?(\n)/g, '<br />'),
+        }}
+      />
 
       <footer>
         <p>
           Preço/hora
-          <strong>{new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(teacher.cost)}</strong>
+          <strong>
+            {new Intl.NumberFormat('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            }).format(teacher.cost)}
+          </strong>
         </p>
-        <a onClick={createNewConnection} href={`https://wa.me/${teacher.whatsapp}?text=Olá, tenho interesse na sua aula de ${teacher.subject}, ${teacher.name}`} target="_blank" rel="noreferrer noopener">
+        <a
+          onClick={createNewConnection}
+          href={`https://wa.me/${teacher.whatsapp}?text=Olá, tenho interesse na sua aula de ${teacher.subject}, ${teacher.name}`}
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           <img src={whatsappIcon} alt="Entrar em contato por Whatsapp" />
           Entrar em contato
         </a>
