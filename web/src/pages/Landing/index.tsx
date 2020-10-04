@@ -13,7 +13,9 @@ import './styles.css';
 import UserHeader from '../../components/UserHeader';
 
 const Landing: React.FC = () => {
-  const [user] = useState(JSON.parse(atob(localStorage.getItem('user') || '')));
+  const [user] = useState(
+    JSON.parse(atob(localStorage.getItem('user') || '') || '{}'),
+  );
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
