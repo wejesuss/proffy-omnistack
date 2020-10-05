@@ -77,6 +77,7 @@ export interface Teacher {
   bio: string;
   cost: number;
   name: string;
+  surname: string;
   subject: string;
   whatsapp: string;
 }

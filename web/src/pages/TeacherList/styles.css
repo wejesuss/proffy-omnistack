@@ -22,6 +22,11 @@
   padding: 0.8rem;
 }
 
+#search-teachers .input-block input,
+#search-teachers .select-block select {
+  margin-top: 0;
+}
+
 #search-teachers button {
   width: 100%;
   height: 5.6rem;
@@ -35,7 +40,7 @@
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
-  margin-top: 3.2rem;
+  margin-top: 1.9rem;
 }
 
 #search-teachers label {
