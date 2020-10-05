@@ -12,11 +12,10 @@ import Trash from '../../components/Trash';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
+import { getSessionUser } from '../../utils/session';
 
 const TeacherForm: FC = () => {
-  const [user] = useState(
-    JSON.parse(atob(localStorage.getItem('user') || '') || '{}'),
-  );
+  const [user] = useState(getSessionUser());
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [scheduleItems, setScheduleItems] = useState([
     { week_day: 0, from: '', to: '' },

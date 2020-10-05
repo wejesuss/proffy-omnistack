@@ -12,11 +12,10 @@ import purpleHeartIcon from '../../assets/images/icons/purple-heart.svg';
 
 import './styles.css';
 import UserHeader from '../../components/UserHeader';
+import { getSessionUser } from '../../utils/session';
 
 const Landing: React.FC = () => {
-  const [user] = useState(
-    JSON.parse(atob(localStorage.getItem('user') || '') || '{}'),
-  );
+  const [user] = useState(getSessionUser());
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const Landing: React.FC = () => {
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
-        {user.avatar ? (
+        {user.id ? (
           <UserHeader
             name={`${user.name} ${user.surname}`}
             image={user.avatar}

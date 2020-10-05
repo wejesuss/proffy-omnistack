@@ -21,3 +21,10 @@ export function login({ token, user }: LoginResponse, remember: boolean): void {
     document.cookie = `${Session.token}=${token}; expires=${now.toUTCString()}`;
   }
 }
+
+export function getSessionUser(): LoginResponse['user'] {
+  const strCryptedUser = localStorage.getItem(Session.user) || btoa('{}');
+  const strUser = atob(strCryptedUser);
+
+  return JSON.parse(strUser);
+}
