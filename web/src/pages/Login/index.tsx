@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
-import { getErrorMessage } from '../../utils';
+import { getErrorMessage, logout } from '../../utils';
 
 import Input from '../../components/Input';
 import LogoContainer from '../../components/LogoContainer';
@@ -73,10 +73,7 @@ const Login: React.FC = () => {
       });
   }
 
-  useEffect(() => {
-    localStorage.clear();
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT';
-  }, []);
+  useEffect(logout, []);
 
   return (
     <div id="page-login">

@@ -30,3 +30,8 @@ export function getErrorMessage(m: string): string {
 
   return errors[m as Mapped] || m;
 }
+
+export function logout(): void {
+  localStorage.clear();
+  document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+}

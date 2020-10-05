@@ -1,4 +1,6 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { logout } from '../../utils';
 
 interface UserHeaderProps {
   name: string;
@@ -9,6 +11,13 @@ const UserHeader: React.FC<UserHeaderProps> = ({
   name,
   image,
 }: UserHeaderProps) => {
+  const history = useHistory();
+
+  function handleLogout() {
+    logout();
+    history.push('/login');
+  }
+
   return (
     <div className="user-container">
       <div className="user">
@@ -17,6 +26,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({
       </div>
       <div className="logout">
         <svg
+          onClick={handleLogout}
           width="40"
           height="40"
           viewBox="0 0 40 40"
