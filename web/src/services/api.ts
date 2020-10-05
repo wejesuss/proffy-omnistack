@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { RoutesPath } from '../@types';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333',
+  baseURL: RoutesPath.baseURL,
 });
 
 export default api;

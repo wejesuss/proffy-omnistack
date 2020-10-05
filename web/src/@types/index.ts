@@ -93,3 +93,11 @@ export interface LoginResponse {
     whatsapp: string;
   };
 }
+
+export enum RoutesPath {
+  baseURL = 'http://localhost:3333',
+  connections = '/connections',
+  forgotPswd = '/users/forgot-password',
+  login = '/users/login',
+  classes = '/classes',
+}

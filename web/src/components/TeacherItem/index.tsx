@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 
-import { TeacherProps } from '../../@types';
+import { RoutesPath, TeacherProps } from '../../@types';
 import api from '../../services/api';
 
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
@@ -9,7 +9,7 @@ import './styles.css';
 
 const TeacherItem: React.FC<TeacherProps> = ({ teacher }) => {
   function createNewConnection() {
-    api.post('/connections', {
+    api.post(RoutesPath.connections, {
       user_id: teacher.user_id,
     });
   }

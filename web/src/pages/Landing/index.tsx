@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import { RoutesPath } from '../../@types';
 import api from '../../services/api';
 
 import logoImg from '../../assets/images/logo.svg';
@@ -19,7 +20,7 @@ const Landing: React.FC = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    api.get('/connections').then((result) => {
+    api.get(RoutesPath.connections).then((result) => {
       const { total: currentTotal } = result.data;
       setTotal(currentTotal);
     });

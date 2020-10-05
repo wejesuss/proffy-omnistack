@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { FC, useState, FormEvent, useEffect } from 'react';
 
-import { Teacher } from '../../@types';
+import { RoutesPath, Teacher } from '../../@types';
 import api from '../../services/api';
 
 import PageHeader from '../../components/PageHeader';
@@ -38,7 +38,7 @@ const TeacherList: FC = () => {
     let newTeachers = [] as Teacher[];
 
     try {
-      const results = await api.get<Teacher[]>('/classes', {
+      const results = await api.get<Teacher[]>(RoutesPath.classes, {
         params: {
           subject,
           week_day: Number(week_day),
@@ -67,7 +67,7 @@ const TeacherList: FC = () => {
 
     subjects.forEach(({ value }) => {
       api
-        .get<Teacher[]>('/classes', {
+        .get<Teacher[]>(RoutesPath.classes, {
           params: {
             subject: value,
             week_day: weekday,

@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { LoginResponse } from '../../@types';
 
+import { LoginResponse, RoutesPath } from '../../@types';
 import api from '../../services/api';
 import { getErrorMessage, login, logout } from '../../utils';
 
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     };
 
     api
-      .post<LoginResponse>('/users/login', credentials)
+      .post<LoginResponse>(RoutesPath.login, credentials)
       .then((res) => {
         const { token, user } = res.data;
 

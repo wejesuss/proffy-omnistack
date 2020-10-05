@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { RoutesPath } from '../../@types';
 import api from '../../services/api';
 import { getErrorMessage } from '../../utils';
 
@@ -18,7 +19,7 @@ const ForgotPassword: React.FC = () => {
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     api
-      .post('/users/forgot-password', {
+      .post(RoutesPath.forgotPswd, {
         email,
       })
       .then(

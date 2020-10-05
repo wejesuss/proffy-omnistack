@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC, useState, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -105,7 +104,7 @@ const TeacherForm: FC = () => {
       buttonText: 'Acessar lista',
       buttonLink: '/study',
     });
-    // api.post("/classes", {
+    // api.post(RoutesPath.classess, {
     //   whatsapp,
     //   bio,
     //   subject,
