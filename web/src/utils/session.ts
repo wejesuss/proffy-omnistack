@@ -1,23 +1,23 @@
-import { LoginResponse } from '../@types';
+import { LoginResponse, Session } from '../@types';
 
 export function logout(): void {
   localStorage.clear();
-  document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+  document.cookie = `${Session.token}=; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
 }
 
 export function login({ token, user }: LoginResponse, remember: boolean): void {
   const now = new Date();
 
-  localStorage.setItem('user', btoa(JSON.stringify(user)));
+  localStorage.setItem(Session.user, btoa(JSON.stringify(user)));
   if (remember) {
-    localStorage.setItem('remember', 'true');
+    localStorage.setItem(Session.remember, 'true');
 
     now.setDate(now.getDate() + 3);
-    document.cookie = `token=${token}; expires=${now.toUTCString()}`;
+    document.cookie = `${Session.token}=${token}; expires=${now.toUTCString()}`;
   } else {
-    localStorage.setItem('remember', 'false');
+    localStorage.setItem(Session.remember, 'false');
 
     now.setDate(now.getDate() + 1);
-    document.cookie = `token=${token}; expires=${now.toUTCString()}`;
+    document.cookie = `${Session.token}=${token}; expires=${now.toUTCString()}`;
   }
 }

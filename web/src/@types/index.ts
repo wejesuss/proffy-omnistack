@@ -101,3 +101,9 @@ export enum RoutesPath {
   login = '/users/login',
   classes = '/classes',
 }
+
+export enum Session {
+  token = '@Proffy_token',
+  remember = '@Proffy_remember',
+  user = '@Proffy_user',
+}
