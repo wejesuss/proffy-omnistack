@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
-import { getErrorMessage, logout } from '../../utils';
+import { getErrorMessage, login, logout } from '../../utils';
 
 import Input from '../../components/Input';
 import LogoContainer from '../../components/LogoContainer';
@@ -13,7 +13,7 @@ import hidedPassIcon from '../../assets/images/icons/hide-password.svg';
 import heartIcon from '../../assets/images/icons/purple-heart.svg';
 import './styles.css';
 
-interface LoginResponse {
+export interface LoginResponse {
   token: string;
   user: {
     id: number;
@@ -47,20 +47,8 @@ const Login: React.FC = () => {
       .post<LoginResponse>('/users/login', credentials)
       .then((res) => {
         const { token, user } = res.data;
-        const now = new Date();
 
-        localStorage.setItem('user', btoa(JSON.stringify(user)));
-        if (remember) {
-          localStorage.setItem('remember', 'true');
-
-          now.setDate(now.getDate() + 7);
-          document.cookie = `token=${token}; expires=${now.toUTCString()}`;
-        } else {
-          localStorage.setItem('remember', 'false');
-
-          now.setDate(now.getDate() + 2);
-          document.cookie = `token=${token}; expires=${now.toUTCString()}`;
-        }
+        login({ token, user }, remember);
 
         history.push('/');
       })
