@@ -1,26 +1,11 @@
 /* eslint-disable react/no-danger */
-/* eslint-disable camelcase */
 import React from 'react';
 
-import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
-
-import './styles.css';
+import { TeacherProps } from '../../@types';
 import api from '../../services/api';
 
-export interface Teacher {
-  id: number;
-  user_id: number;
-  avatar: string;
-  bio: string;
-  cost: number;
-  name: string;
-  subject: string;
-  whatsapp: string;
-}
-
-interface TeacherProps {
-  teacher: Teacher;
-}
+import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
+import './styles.css';
 
 const TeacherItem: React.FC<TeacherProps> = ({ teacher }) => {
   function createNewConnection() {

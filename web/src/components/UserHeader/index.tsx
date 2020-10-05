@@ -1,11 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { UserHeaderProps } from '../../@types';
 import { logout } from '../../utils';
-
-interface UserHeaderProps {
-  name: string;
-  image: string;
-}
 
 const UserHeader: React.FC<UserHeaderProps> = ({
   name,

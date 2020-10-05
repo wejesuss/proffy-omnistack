@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { SuccessStateProps } from './@types';
 
 import Landing from './pages/Landing';
 import TeacherList from './pages/TeacherList';
@@ -7,14 +8,6 @@ import TeacherForm from './pages/TeacherForm';
 import Success from './pages/Success';
 import ForgotPassword from './pages/ForgotPassword';
 import Login from './pages/Login';
-
-interface StateProps {
-  success?: boolean;
-  messageTitle: string;
-  message: string;
-  buttonText: string;
-  buttonLink: string;
-}
 
 const Routes: React.FC = () => {
   return (
@@ -59,7 +52,7 @@ const Routes: React.FC = () => {
         path="/success"
         exact
         render={({ location }) => {
-          const successProps = location.state as StateProps;
+          const successProps = location.state as SuccessStateProps;
 
           if (successProps?.success) {
             return <Success {...successProps} />;

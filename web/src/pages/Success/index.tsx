@@ -1,17 +1,11 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { SuccessProps } from '../../@types';
 
 import logoImg from '../../assets/images/logo.svg';
 import successIcon from '../../assets/images/icons/success-check-icon.svg';
 
 import './styles.css';
-
-interface SuccessProps {
-  messageTitle: string;
-  message: string;
-  buttonText: string;
-  buttonLink: string;
-}
 
 const Success: React.FC<SuccessProps> = ({
   message,

@@ -1,12 +1,8 @@
 import React from 'react';
+import { TrashProps } from '../../@types';
 
 import trashIcon from '../../assets/images/icons/trash.svg';
-
 import './styles.css';
-
-interface TrashProps {
-  removeScheduleItem: () => void;
-}
 
 const Trash: React.FC<TrashProps> = ({ removeScheduleItem }) => {
   return (

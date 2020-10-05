@@ -1,17 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { SelectHTMLAttributes } from 'react';
+import React from 'react';
+import { SelectProps } from '../../@types';
 
 import './styles.css';
-
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  name: string;
-  labelExtraInfo?: React.ReactNode;
-  options: Array<{
-    value: string;
-    label: string;
-  }>;
-}
 
 const Select: React.FC<SelectProps> = ({
   name,

@@ -1,12 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ControlContainerProps } from '../../@types';
 
 import backIcon from '../../assets/images/icons/back.svg';
-
-interface ControlContainerProps {
-  pageId: string;
-  backLink?: string;
-}
 
 const ControlContainer: React.FC<ControlContainerProps> = ({
   backLink,

@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { LoginResponse } from '../../@types';
 
 import api from '../../services/api';
 import { getErrorMessage, login, logout } from '../../utils';
@@ -12,19 +13,6 @@ import shownPassIcon from '../../assets/images/icons/show-password.svg';
 import hidedPassIcon from '../../assets/images/icons/hide-password.svg';
 import heartIcon from '../../assets/images/icons/purple-heart.svg';
 import './styles.css';
-
-export interface LoginResponse {
-  token: string;
-  user: {
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    avatar: string;
-    bio: string;
-    whatsapp: string;
-  };
-}
 
 const Login: React.FC = () => {
   const history = useHistory();

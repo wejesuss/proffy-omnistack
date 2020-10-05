@@ -1,4 +1,4 @@
-import { LoginResponse } from '../pages/Login';
+import { LoginResponse } from '../@types';
 
 export function logout(): void {
   localStorage.clear();

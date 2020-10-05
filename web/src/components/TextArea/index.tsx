@@ -1,12 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { TextareaHTMLAttributes } from 'react';
+import React from 'react';
+import { TextAreaProps } from '../../@types';
 
 import './styles.css';
-
-interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label: string;
-  name: string;
-}
 
 const TextArea: React.FC<TextAreaProps> = ({
   name,

@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { FC, useState, FormEvent, useEffect } from 'react';
+
+import { Teacher } from '../../@types';
+import api from '../../services/api';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
-import TeacherItem, { Teacher } from '../../components/TeacherItem';
-
-import api from '../../services/api';
+import TeacherItem from '../../components/TeacherItem';
 
 import smileIcon from '../../assets/images/icons/smile.svg';
 import './styles.css';

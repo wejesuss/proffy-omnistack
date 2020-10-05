@@ -1,17 +1,9 @@
-import React, { InputHTMLAttributes, FormEvent, memo } from 'react';
+import React, { FormEvent, memo } from 'react';
+import { InputProps } from '../../@types';
 
-import './styles.css';
 import { phone, currency } from '../../utils';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  leftBar?: boolean;
-  label: string;
-  upLabel?: { active: boolean };
-  name: string;
-  mask?: 'phone' | 'currency';
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
-  symbol?: React.ReactNode;
-}
+import './styles.css';
 
 const Input: React.FC<InputProps> = ({
   leftBar = false,
