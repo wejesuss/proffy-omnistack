@@ -17,9 +17,16 @@ const TeacherItem: React.FC<TeacherProps> = ({ teacher }) => {
   return (
     <article className="teacher-item">
       <header>
-        <img src={teacher.avatar} alt={teacher.name} />
+        <img
+          src={RoutesPath.baseURL + teacher.avatar}
+          alt={`${teacher.name} ${teacher.surname}`}
+        />
         <div>
-          <strong>{teacher.name}</strong>
+          <strong>
+            {teacher.name}
+            {'  '}
+            {teacher.surname}
+          </strong>
           <span>{teacher.subject}</span>
         </div>
       </header>
