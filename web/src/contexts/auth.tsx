@@ -1,10 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 import * as auth from '../services/auth';
-import { login, logout } from '../utils';
+import { login, getSessionUser } from '../utils';
 
 import { User, LoginResultStatus } from '../@types';
-import { getSessionUser } from '../utils/session';
 
 interface AuthContextData {
   signed: boolean;
@@ -48,7 +47,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }
 
   function signOut() {
-    logout();
+    auth.signOut();
     setUser(null);
   }
 
