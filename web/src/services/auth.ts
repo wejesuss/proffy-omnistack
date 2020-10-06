@@ -4,6 +4,7 @@ import {
   LoginSuccess,
   RoutesPath,
 } from '../@types';
+import { logout } from '../utils';
 import api from './api';
 
 export async function signIn(credentials: {
@@ -20,4 +21,8 @@ export async function signIn(credentials: {
   } catch (reason) {
     return { result: false, error: reason };
   }
+}
+
+export function signOut(): void {
+  logout();
 }
