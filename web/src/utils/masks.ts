@@ -10,6 +10,11 @@ export function phone(e: FormEvent<HTMLInputElement>): string {
 
 export function currency(e: FormEvent<HTMLInputElement>): string {
   let value = e.currentTarget.value.replace(/\D/g, '');
+
+  if (+value > 1000000) {
+    value = '1000000';
+  }
+
   value = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
