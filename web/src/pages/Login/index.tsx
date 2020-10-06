@@ -1,9 +1,8 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { LoginResponse, RoutesPath } from '../../@types';
-import api from '../../services/api';
-import { getErrorMessage, login, logout } from '../../utils';
+import { getErrorMessage } from '../../utils';
+import { useAuth } from '../../contexts/auth';
 
 import Input from '../../components/Input';
 import LogoContainer from '../../components/LogoContainer';
@@ -21,8 +20,9 @@ const Login: React.FC = () => {
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
+  const { signIn, signOut } = useAuth();
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     setMessage('');
 
@@ -31,25 +31,21 @@ const Login: React.FC = () => {
       password,
     };
 
-    api
-      .post<LoginResponse>(RoutesPath.login, credentials)
-      .then((res) => {
-        const { token, user } = res.data;
+    const { result, error } = await signIn(credentials, remember);
 
-        login({ token, user }, remember);
+    if (result) {
+      history.push('/');
+    } else {
+      console.error(error?.response?.data?.error);
+      setMessage(
+        getErrorMessage(error?.response?.data?.error || error?.message),
+      );
 
-        history.push('/');
-      })
-      .catch((reason) => {
-        console.error(reason?.response?.data?.error);
-        setPassword('');
-        setMessage(
-          getErrorMessage(reason?.response?.data?.error || reason.message),
-        );
-      });
+      setPassword('');
+    }
   }
 
-  useEffect(logout, []);
+  useEffect(signOut, []);
 
   return (
     <div id="page-login">

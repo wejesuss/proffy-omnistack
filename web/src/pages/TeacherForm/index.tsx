@@ -1,6 +1,8 @@
 import React, { FC, useState, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { getSessionUser } from '../../utils/session';
+
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
 import TextArea from '../../components/TextArea';
@@ -12,7 +14,6 @@ import Trash from '../../components/Trash';
 import warningIcon from '../../assets/images/icons/warning.svg';
 import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
-import { getSessionUser } from '../../utils/session';
 
 const TeacherForm: FC = () => {
   const [user] = useState(getSessionUser());
@@ -143,10 +144,10 @@ const TeacherForm: FC = () => {
             <legend>Seu dados</legend>
             <div className="user-container group-container">
               <div className="user-info">
-                <img src={user.avatar} alt="Conta do usuário" />
-                {user.name}
+                <img src={user?.avatar} alt="Conta do usuário" />
+                {user?.name}
                 {'  '}
-                {user.surname}
+                {user?.surname}
               </div>
               <Input
                 label="Whatsapp"

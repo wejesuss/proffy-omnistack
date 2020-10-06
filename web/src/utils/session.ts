@@ -1,4 +1,5 @@
-import { LoginResponse, Session } from '../@types';
+import { LoginResponse, Session, User } from '../@types';
+import api from '../services/api';
 
 export function logout(): void {
   localStorage.clear();
@@ -22,9 +23,19 @@ export function login({ token, user }: LoginResponse, remember: boolean): void {
   }
 }
 
-export function getSessionUser(): LoginResponse['user'] {
-  const strCryptedUser = localStorage.getItem(Session.user) || btoa('{}');
-  const strUser = atob(strCryptedUser);
+export function getSessionUser(): User | null {
+  const strCryptedUser = localStorage.getItem(Session.user);
+  const token = localStorage.getItem(Session.token);
+  let strUser = null;
 
-  return JSON.parse(strUser);
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (strCryptedUser) {
+    strUser = atob(strCryptedUser);
+    return JSON.parse(strUser);
+  }
+
+  return strUser;
 }

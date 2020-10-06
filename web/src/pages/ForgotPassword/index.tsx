@@ -7,9 +7,9 @@ import { getErrorMessage } from '../../utils';
 
 import Input from '../../components/Input';
 import LogoContainer from '../../components/LogoContainer';
+import ControlContainer from '../../components/ControlContainer';
 
 import './styles.css';
-import ControlContainer from '../../components/ControlContainer';
 
 const ForgotPassword: React.FC = () => {
   const history = useHistory();

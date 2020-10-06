@@ -28,7 +28,7 @@ const Landing: React.FC = () => {
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
-        {user.id ? (
+        {user?.id ? (
           <UserHeader
             name={`${user.name} ${user.surname}`}
             image={user.avatar}
