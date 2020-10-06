@@ -1,16 +1,18 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../contexts/auth';
+
 import { UserHeaderProps } from '../../@types';
-import { logout } from '../../utils';
 
 const UserHeader: React.FC<UserHeaderProps> = ({
   name,
   image,
 }: UserHeaderProps) => {
   const history = useHistory();
+  const { signOut } = useAuth();
 
   function handleLogout() {
-    logout();
+    signOut();
     history.push('/login');
   }
 

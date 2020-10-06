@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import UserHeader from '../../components/UserHeader';
+
 import { RoutesPath } from '../../@types';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 import logoImg from '../../assets/images/logo.svg';
 import landingImg from '../../assets/images/landing.svg';
@@ -11,11 +14,9 @@ import giveClassesIcon from '../../assets/images/icons/give-classes.svg';
 import purpleHeartIcon from '../../assets/images/icons/purple-heart.svg';
 
 import './styles.css';
-import UserHeader from '../../components/UserHeader';
-import { getSessionUser } from '../../utils/session';
 
 const Landing: React.FC = () => {
-  const [user] = useState(getSessionUser());
+  const { user } = useAuth();
   const [total, setTotal] = useState(0);
 
   useEffect(() => {

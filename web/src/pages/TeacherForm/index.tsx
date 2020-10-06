@@ -1,7 +1,7 @@
 import React, { FC, useState, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { getSessionUser } from '../../utils/session';
+import { useAuth } from '../../contexts/auth';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
@@ -16,7 +16,7 @@ import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
 
 const TeacherForm: FC = () => {
-  const [user] = useState(getSessionUser());
+  const { user } = useAuth();
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [scheduleItems, setScheduleItems] = useState([
     { week_day: 0, from: '', to: '' },
