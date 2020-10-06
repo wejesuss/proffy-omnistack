@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import { AxiosError } from 'axios';
 import {
   InputHTMLAttributes,
   SelectHTMLAttributes,
@@ -94,6 +95,10 @@ export interface LoginResponse {
     whatsapp: string;
   };
 }
+
+export type LoginSuccess = { token: string; user: User };
+export type LoginResultStatus = { result: boolean; error: AxiosError | null };
+export type User = LoginResponse['user'];
 
 export enum RoutesPath {
   baseURL = 'http://localhost:3333',
