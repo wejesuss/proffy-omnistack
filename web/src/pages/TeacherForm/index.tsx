@@ -1,5 +1,6 @@
-import React, { FC, useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+import { RoutesPath, ScheduleItem } from '../../@types';
 
 import { useAuth } from '../../contexts/auth';
 
@@ -9,22 +10,24 @@ import TextArea from '../../components/TextArea';
 import Select from '../../components/Select';
 import Trash from '../../components/Trash';
 
-// import api from '../../services/api';
+import api from '../../services/api';
+import { getErrorMessage } from '../../utils';
 
 import warningIcon from '../../assets/images/icons/warning.svg';
 import rocketIcon from '../../assets/images/icons/rocket.svg';
 import './styles.css';
 
-const TeacherForm: FC = () => {
+const TeacherForm: React.FC = () => {
   const { user } = useAuth();
   const [days, setDays] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [scheduleItems, setScheduleItems] = useState([
     { week_day: 0, from: '', to: '' },
   ]);
-  const [, setWhatsapp] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [bio, setBio] = useState('');
   const [subject, setSubject] = useState('');
-  const [, setCost] = useState('');
+  const [cost, setCost] = useState('');
+  const [message, setMessage] = useState('');
 
   const history = useHistory();
 
@@ -95,29 +98,76 @@ const TeacherForm: FC = () => {
 
   function handleCreateClass(e: FormEvent) {
     e.preventDefault();
+    setMessage('');
 
-    history.push('/success', {
-      success: true,
-      messageTitle: 'Cadastro salvo!',
-      message:
-        'Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.',
-      buttonText: 'Acessar lista',
-      buttonLink: '/study',
-    });
-    // api.post(RoutesPath.classess, {
-    //   whatsapp,
-    //   bio,
-    //   subject,
-    //   cost: Number(cost),
-    //   schedule: scheduleItems
-    // }).then(() => {
-    //   alert('Cadastrado com sucesso')
-    //   history.push("/study")
-    // }).catch((reason) => {
-    //   console.error(reason)
-    //   alert("Erro no cadastro!")
-    // })
+    api
+      .post(RoutesPath.classes, {
+        email: user?.email,
+        whatsapp: whatsapp.replace(/\D/g, ''),
+        bio,
+        subject,
+        cost: Number(cost.replace(/\D/g, '')) / 100,
+        schedule: scheduleItems,
+      })
+      .then(() => {
+        history.push('/success', {
+          success: true,
+          messageTitle: 'Cadastro salvo!',
+          message:
+            'Tudo certo, seu cadastro está na nossa lista de professores. Agora é só ficar de olho no seu WhatsApp.',
+          buttonText: 'Acessar lista',
+          buttonLink: '/study',
+        });
+      })
+      .catch((reason) => {
+        console.error(reason?.response?.data?.error);
+        setMessage(
+          getErrorMessage(reason?.response?.data?.error || reason?.message),
+        );
+      });
   }
+
+  useEffect(() => {
+    api
+      .get(RoutesPath.searchUser)
+      .then((res) => {
+        const { data } = res;
+
+        if (data.schedule) {
+          const schedule = (data.schedule as ScheduleItem[]).map(
+            (classSchedule) => {
+              return {
+                week_day: classSchedule.week_day,
+                from: classSchedule.from,
+                to: classSchedule.to,
+              };
+            },
+          );
+
+          setScheduleItems(schedule);
+        }
+
+        if (data.user) {
+          setWhatsapp(
+            data.user.whatsapp.replace(
+              /^(\(?\d{2}\)?)(\d{5})(\d{4})/g,
+              '($1) $2-$3',
+            ),
+          );
+          setBio(data.user.bio);
+          setSubject(data.user.subject);
+          setCost(
+            Intl.NumberFormat('pt-BR', {
+              currency: 'BRL',
+              style: 'currency',
+            }).format(data.user.cost),
+          );
+        }
+      })
+      .catch((reason) => {
+        console.error(reason.response.data.error);
+      });
+  }, [user]);
 
   return (
     <div id="page-give-classes" className="container">
@@ -155,6 +205,8 @@ const TeacherForm: FC = () => {
                 placeholder="(  ) _ ____ ____"
                 mask="phone"
                 id="whatsapp"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
                 setValue={setWhatsapp}
               >
                 <small>(+55)</small>
@@ -207,6 +259,8 @@ const TeacherForm: FC = () => {
                 placeholder="R$"
                 mask="currency"
                 id="cost"
+                value={cost}
+                onChange={(e) => setCost(e.target.value)}
                 setValue={setCost}
               >
                 <small>(R$)</small>
@@ -283,6 +337,8 @@ const TeacherForm: FC = () => {
             Salvar cadastro
           </button>
         </footer>
+
+        <p className="message">{message}</p>
       </main>
     </div>
   );
