@@ -83,6 +83,12 @@ export interface Teacher {
   whatsapp: string;
 }
 
+export interface ScheduleItem {
+  week_day: number;
+  from: string;
+  to: string;
+}
+
 export interface LoginResponse {
   token: string;
   user: {
@@ -105,6 +111,7 @@ export enum RoutesPath {
   connections = '/connections',
   forgotPswd = '/users/forgot-password',
   login = '/users/login',
+  searchUser = '/users/search',
   classes = '/classes',
 }
 
