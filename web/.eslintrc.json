@@ -26,6 +26,8 @@
   ],
   "rules": {
       "react-hooks/rules-of-hooks": "error",
+      "no-console": "off",
+      "react/prop-types": "off",
       "react-hooks/exhaustive-deps": "warn",
       "react/jsx-filename-extension": [1, {"extensions": [".tsx"] }],
       "import/prefer-default-export": "off",
@@ -38,9 +40,7 @@
           }
       ],
       "prettier/prettier": "error",
-      "react/jsx-props-no-spreading": {
-        "html": "ignore"
-      }
+      "react/jsx-props-no-spreading": "off"
   },
   "settings": {
       "import/resolver": {

@@ -3,9 +3,28 @@
   height: 100vh;
 }
 
+#page-teacher-list .total-proffys {
+  display: none;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 90px;
+}
+
+#page-teacher-list .total-proffys p {
+  margin: 0 0 0 2.4rem;
+  font-size: 1.4rem;
+  line-height: 2rem;
+}
+
 #search-teachers {
   margin-top: 3.2rem;
   padding: 0.8rem;
+}
+
+#search-teachers .input-block input,
+#search-teachers .select-block select {
+  margin-top: 0;
 }
 
 #search-teachers button {
@@ -21,7 +40,7 @@
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
-  margin-top: 3.2rem;
+  margin-top: 1.9rem;
 }
 
 #search-teachers label {
@@ -33,9 +52,25 @@
   width: 90%;
 }
 
+#page-teacher-list main p.results {
+  max-width: 30rem;
+  margin: 4rem auto 0;
+  text-align: center;
+}
+
+#page-teacher-list main p.no-results {
+  max-width: 30rem;
+  margin: 6em auto 0;
+  text-align: center;
+}
+
 @media (min-width: 700px) {
   #page-teacher-list {
     max-width: 100%;
+  }
+
+  #page-teacher-list .total-proffys {
+    display: flex;
   }
 
   #search-teachers {

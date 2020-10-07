@@ -1,9 +1,8 @@
 import Knex from 'knex';
 
-export async function up(knex: Knex) {
+export async function up(knex: Knex): Promise<Knex.SchemaBuilder> {
     return knex.schema.createTable('connections', (table) => {
         table.increments('id').primary();
-
         table
             .integer('user_id')
             .notNullable()
@@ -11,8 +10,6 @@ export async function up(knex: Knex) {
             .inTable('users')
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
-
-        // eslint-disable-next-line prettier/prettier
         table
             .timestamp('created_at')
             .defaultTo(knex.raw('CURRENT_TIMESTAMP'))
@@ -20,6 +17,6 @@ export async function up(knex: Knex) {
     });
 }
 
-export async function down(knex: Knex) {
+export async function down(knex: Knex): Promise<Knex.SchemaBuilder> {
     return knex.schema.dropTable('connections');
 }

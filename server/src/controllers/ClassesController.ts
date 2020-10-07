@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import db from '../database/connection';
 import { convertHoursToMinutes } from '../utils/convertHoursToMinutes';
+import { formatScheduleItems } from '../utils/formatScheduleItems';
 
 interface ScheduleItem {
     week_day: number;
@@ -61,25 +62,32 @@ class ClassesController {
     }
 
     async create(req: Request, res: Response) {
-        const {
-            name,
-            avatar,
-            whatsapp,
-            bio,
-            cost,
-            subject,
-            schedule,
-        } = req.body;
+        const { email, bio, whatsapp, cost, subject, schedule } = req.body;
+
+        if (!email || !cost || !subject || !schedule) {
+            return res.status(400).json({ error: 'please, send all values' });
+        }
 
         const trx = await db.transaction();
 
         try {
-            const [user_id] = await trx('users').insert({
-                name,
-                avatar,
-                whatsapp,
-                bio,
-            });
+            const user = await trx('users').where('email', '=', email).first();
+
+            const user_id = user?.id;
+
+            if (!user_id) {
+                await trx.rollback();
+                return res.status(400).json({ error: 'user not found' });
+            }
+
+            const newUserInfo = {
+                whatsapp: whatsapp || user.whatsapp,
+                bio: bio || user.bio,
+            };
+
+            await trx('users').update(newUserInfo);
+
+            await trx('classes').where('user_id', '=', user_id).delete();
 
             const [class_id] = await trx('classes').insert({
                 subject,
@@ -87,14 +95,7 @@ class ClassesController {
                 user_id,
             });
 
-            const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
-                return {
-                    week_day: scheduleItem.week_day,
-                    from: convertHoursToMinutes(scheduleItem.from),
-                    to: convertHoursToMinutes(scheduleItem.to),
-                    class_id,
-                };
-            });
+            const classSchedule = formatScheduleItems(schedule, class_id);
 
             await trx('class_schedule').insert(classSchedule);
 

@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+#schedule-items .input-block.trash button {
+  background: transparent;
+}
+
 #schedule-items .input-block.trash img {
   height: 64px;
   cursor: pointer;

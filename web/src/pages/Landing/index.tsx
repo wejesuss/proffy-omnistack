@@ -1,30 +1,59 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import './styles.css';
+import UserHeader from '../../components/UserHeader';
+
+import { RoutesPath } from '../../@types';
+import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 import logoImg from '../../assets/images/logo.svg';
 import landingImg from '../../assets/images/landing.svg';
 import studyIcon from '../../assets/images/icons/study.svg';
 import giveClassesIcon from '../../assets/images/icons/give-classes.svg';
 import purpleHeartIcon from '../../assets/images/icons/purple-heart.svg';
-import api from '../../services/api';
+
+import './styles.css';
 
 const Landing: React.FC = () => {
-  const [total, setTotal] = useState(0)
+  const { user } = useAuth();
+  const [total, setTotal] = useState(0);
+
+  async function getConnections() {
+    const { data } = await api.get(RoutesPath.connections);
+
+    return data.total;
+  }
 
   useEffect(() => {
-    api.get("/connections").then(result => {
-      const {total} = result.data
-      setTotal(total)
-    })
+    let isMounted = true;
+    getConnections().then((actualTotal) => {
+      if (isMounted) setTotal(() => actualTotal);
+    });
 
-  }, [])
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
+        {user?.id ? (
+          <UserHeader
+            name={`${user.name} ${user.surname}`}
+            image={user.avatar}
+          />
+        ) : (
+          <div className="user-container">
+            <div className="user" />
+
+            <Link to="/login" className="login">
+              Log in
+            </Link>
+          </div>
+        )}
+
         <div className="logo-container">
           <img src={logoImg} alt="Logo Proffy" />
           <h2>Sua plataforma de estudos online</h2>
@@ -48,12 +77,26 @@ const Landing: React.FC = () => {
           </Link>
         </div>
 
-        <span className="total-connections">
-          Total de
-          <strong> {total} </strong>
-          conexões já realizadas{' '}
-          <img src={purpleHeartIcon} alt="Coração Roxo" />
-        </span>
+        <div className="greeting">
+          <h2>
+            <>
+              Seja bem vindo!
+              <br />
+              <strong>O que deseja?</strong>
+            </>
+          </h2>
+          <span className="total-connections">
+            <>
+              Total de
+              <strong>{total}</strong>
+              conexões
+              <br />
+              já realizadas
+              {'  '}
+              <img src={purpleHeartIcon} alt="Coração Roxo" />
+            </>
+          </span>
+        </div>
       </div>
     </div>
   );
