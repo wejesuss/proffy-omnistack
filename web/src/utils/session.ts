@@ -23,9 +23,22 @@ export function login({ token, user }: LoginResponse, remember: boolean): void {
   }
 }
 
+export function getCookie(key: string): string {
+  const strCookie =
+    document.cookie.split(';').find((cookie) => {
+      return cookie.includes(key);
+    }) || '';
+
+  const [, value] = strCookie
+    ?.split('=')
+    .map((cookieValue) => cookieValue.trim());
+
+  return value;
+}
+
 export function getSessionUser(): User | null {
   const strCryptedUser = localStorage.getItem(Session.user);
-  const token = localStorage.getItem(Session.token);
+  const token = getCookie(Session.token);
   let strUser = null;
 
   if (token) {
