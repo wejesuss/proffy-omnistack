@@ -19,11 +19,21 @@ const Landing: React.FC = () => {
   const { user } = useAuth();
   const [total, setTotal] = useState(0);
 
+  async function getConnections() {
+    const { data } = await api.get(RoutesPath.connections);
+
+    return data.total;
+  }
+
   useEffect(() => {
-    api.get(RoutesPath.connections).then((result) => {
-      const { total: currentTotal } = result.data;
-      setTotal(currentTotal);
+    let isMounted = true;
+    getConnections().then((actualTotal) => {
+      if (isMounted) setTotal(() => actualTotal);
     });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
