@@ -6,7 +6,6 @@ import { getToken } from '../services';
 import { generateRandomHex } from '../utils/generateRandomHex';
 import sendMail from '../utils/sendMail';
 import { baseForgotEmailText as baseText } from '../resources/mail/forgotPasswordEmail';
-import getMyIPAddress from '../utils/getMyIpAddress';
 
 interface UserProps {
     name: string;
@@ -61,9 +60,7 @@ class SessionController {
                 surname: user.surname,
             });
 
-            user.avatar = `http://${getMyIPAddress('Wi-Fi').address}:3333/${
-                user.avatar
-            }`;
+            user.avatar = `http://localhost:3333/${user.avatar}`;
             user.password = undefined;
 
             return res.json({ user, token });
