@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { hash } from 'bcrypt';
 
-import { getToken, verifyToken } from '../services';
 import db from '../database/connection';
+import { getToken, verifyToken } from '../services';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { formatScheduleItems } from '../utils/formatScheduleItems';
+import { unformatScheduleItem } from '../utils/unformatScheduleItem';
 
 interface UserProps {
     name: string;
@@ -69,11 +70,19 @@ class UsersController {
                 .join('users', 'classes.user_id', '=', 'users.id')
                 .where('users.id', '=', verifiedToken.id);
 
-            const schedule = await db('class_schedule').where(
+            if (!user) {
+                return res
+                    .status(400)
+                    .json({ error: 'user without class yet' });
+            }
+
+            let schedule = await db('class_schedule').where(
                 'class_id',
                 '=',
                 user.class_id
             );
+
+            schedule = unformatScheduleItem(schedule);
 
             return res.json({ user, schedule });
         } catch (err) {
