@@ -1,17 +1,50 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Login from '../pages/Login';
 import ForgotPassword from '../pages/ForgotPassword';
-import AllRoutes from './all.routes';
+import Landing from '../pages/Landing';
+import { getSessionUser } from '../utils';
 
 const AuthRoutes: React.FC = () => {
+  const user = getSessionUser();
+
   return (
     <>
-      <AllRoutes />
       <Switch>
-        <Route path="/login" exact component={Login} />
-        <Route path="/forgot-pswd" exact component={ForgotPassword} />
+        <Route path="/" exact component={Landing} />
+
+        <Route
+          path="/login"
+          exact
+          render={() => {
+            if (user?.id) {
+              return <Redirect to="/" />;
+            }
+
+            return <Login />;
+          }}
+        />
+        <Route
+          path="/forgot-pswd"
+          exact
+          render={() => {
+            if (user?.id) {
+              return <Redirect to="/" />;
+            }
+
+            return <ForgotPassword />;
+          }}
+        />
+
+        <Route
+          path="*"
+          render={() => {
+            if (!user?.id) return <Redirect to="/login" />;
+
+            return <></>;
+          }}
+        />
       </Switch>
     </>
   );

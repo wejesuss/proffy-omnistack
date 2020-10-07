@@ -5,13 +5,16 @@ import { SuccessStateProps } from '../@types';
 import TeacherList from '../pages/TeacherList';
 import TeacherForm from '../pages/TeacherForm';
 import Success from '../pages/Success';
-import AllRoutes from './all.routes';
+import Landing from '../pages/Landing';
+import { getSessionUser } from '../utils';
 
 const AppRoutes: React.FC = () => {
+  const user = getSessionUser();
+
   return (
     <>
-      <AllRoutes />
       <Switch>
+        <Route path="/" exact component={Landing} />
         <Route path="/study" exact component={TeacherList} />
         <Route path="/give-classes" exact component={TeacherForm} />
         <Route
@@ -23,6 +26,15 @@ const AppRoutes: React.FC = () => {
             if (successProps?.success) {
               return <Success {...successProps} />;
             }
+
+            return <Redirect to="/" />;
+          }}
+        />
+        <Route
+          path="*"
+          render={() => {
+            console.log(user);
+            if (user?.id) return <Redirect to="/" />;
 
             return <Redirect to="/" />;
           }}
