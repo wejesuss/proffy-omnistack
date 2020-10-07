@@ -148,7 +148,7 @@ class UsersController {
         }: EditProfileRequest = req.body;
 
         if (!token) {
-            return res.status(400).json({ error: 'expected token' });
+            return res.status(400).json({ error: 'please, send all values' });
         }
 
         let user: DecryptedToken;

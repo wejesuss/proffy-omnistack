@@ -19,15 +19,11 @@ class SessionController {
         const { email, password }: UserProps = req.body;
 
         if (!email) {
-            return res
-                .status(400)
-                .json({ error: 'do not forget to send the email address' });
+            return res.status(400).json({ error: 'please, send all values' });
         }
 
         if (!password) {
-            return res
-                .status(400)
-                .json({ error: 'do not forget to send the password' });
+            return res.status(400).json({ error: 'please, send all values' });
         }
 
         try {
@@ -79,7 +75,7 @@ class SessionController {
             if (!email) {
                 return res
                     .status(400)
-                    .json({ error: 'do not forget to send the email address' });
+                    .json({ error: 'please, send all values' });
             }
 
             const [user] = await db('users').where('email', '=', email);
@@ -134,7 +130,7 @@ class SessionController {
 
         if (!token || !email || !newPassword) {
             return res.status(400).json({
-                error: 'token, email and newPassword expected, send all values',
+                error: 'please, send all values',
             });
         }
 
